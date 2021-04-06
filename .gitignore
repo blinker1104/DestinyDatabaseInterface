@@ -1,3 +1,8 @@
+#Dbs
+*.db
+*.content
+
+
 # Logs
 logs
 *.log
