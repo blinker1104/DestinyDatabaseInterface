@@ -58,7 +58,8 @@ let printSeasonInfo = () => {
 }
 
 //Huckleberry itemHash = 2286143274
-let printItemInfo = (itemHash=2286143274) => {
+//Posterity itemHash   = 3281285075
+let printItemInfo = (itemHash=3281285075) => {
   console.log('id: ' + itemHash); // console.log(jsonObjs[0]);
   console.log('item#: ' + itemInfo.length);
 
@@ -74,6 +75,8 @@ let printItemInfo = (itemHash=2286143274) => {
   }
 
 }
+
+
 
 
 db.close( () => {

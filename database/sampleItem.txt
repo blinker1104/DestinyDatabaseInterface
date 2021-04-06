@@ -1,0 +1,315 @@
+
+
+
+
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=300
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "instance": {
+          "data": {
+              "damageType": 1,
+              "damageTypeHash": 3373582085,
+              "primaryStat": {
+                  "statHash": 1480404414,
+                  "value": 1300
+              },
+              "itemLevel": 130,
+              "quality": 0,
+              "isEquipped": true,
+              "canEquip": true,
+              "equipRequiredLevel": 50,
+              "unlockHashesRequiredToEquip": [
+                  2166136261
+              ],
+              "cannotEquipReason": 0
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=301
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "objectives": {
+          "data": {
+              "objectives": [
+                  {
+                      "objectiveHash": 1704223349,
+                      "progress": 0,
+                      "completionValue": 1,
+                      "complete": false,
+                      "visible": false
+                  },
+                  {
+                      "objectiveHash": 693609513,
+                      "progress": 0,
+                      "completionValue": 1,
+                      "complete": false,
+                      "visible": false
+                  }
+              ]
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=302
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "perks": {
+          "data": {
+              "perks": [
+                  {
+                      "perkHash": 4067532283,
+                      "iconPath": "/common/destiny2_content/icons/7bc8bdf93404f730cf506db85f23d69d.png",
+                      "isActive": true,
+                      "visible": true
+                  },
+                  {
+                      "perkHash": 749652528,
+                      "iconPath": "",
+                      "isActive": true,
+                      "visible": false
+                  },
+                  {
+                      "perkHash": 2445944915,
+                      "iconPath": "",
+                      "isActive": true,
+                      "visible": false
+                  },
+                  {
+                      "perkHash": 2070252610,
+                      "iconPath": "/common/destiny2_content/icons/e9aa2f479812bfabc8d48effde384737.png",
+                      "isActive": true,
+                      "visible": true
+                  },
+                  {
+                      "perkHash": 3469836202,
+                      "iconPath": "",
+                      "isActive": true,
+                      "visible": false
+                  },
+                  {
+                      "perkHash": 832124207,
+                      "iconPath": "/common/destiny2_content/icons/2fd9dc9a0cea6af841514c0f076f53b9.png",
+                      "isActive": true,
+                      "visible": true
+                  }
+              ]
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=303
+
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "renderData": {
+          "data": {
+              "useCustomDyes": true,
+              "artRegions": {
+                  "3": 0,
+                  "17": 0
+              }
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=304
+
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "stats": {
+          "data": {
+              "stats": {
+                  "4284893193": {
+                      "statHash": 4284893193,
+                      "value": 750
+                  },
+                  "4043523819": {
+                      "statHash": 4043523819,
+                      "value": 22
+                  },
+                  "1240592695": {
+                      "statHash": 1240592695,
+                      "value": 58
+                  },
+                  "155624089": {
+                      "statHash": 155624089,
+                      "value": 56
+                  },
+                  "943549884": {
+                      "statHash": 943549884,
+                      "value": 87
+                  },
+                  "4188031367": {
+                      "statHash": 4188031367,
+                      "value": 10
+                  },
+                  "3871231066": {
+                      "statHash": 3871231066,
+                      "value": 37
+                  }
+              }
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=305
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "sockets": {
+          "data": {
+              "sockets": [
+                  {
+                      "plugHash": 630329983,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "plugHash": 1840239774,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "plugHash": 1885400500,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "plugHash": 3551326236,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "plugHash": 1067908860,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "isEnabled": false,
+                      "isVisible": false
+                  },
+                  {
+                      "plugHash": 2775242452,
+                      "isEnabled": true,
+                      "isVisible": true
+                  },
+                  {
+                      "plugHash": 3459475454,
+                      "isEnabled": true,
+                      "isVisible": true
+                  }
+              ]
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=306
+
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "talentGrid": {
+          "data": {
+              "talentGridHash": 521135891,
+              "nodes": [],
+              "isGridComplete": false
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
+
+
+
+
+
+https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529202240813644/?components=307
+
+{
+  "Response": {
+      "characterId": "2305843009359234351",
+      "item": {
+          "data": {
+              "itemHash": 2286143274,
+              "itemInstanceId": "6917529202240813644",
+              "quantity": 1,
+              "bindStatus": 0,
+              "location": 1,
+              "bucketHash": 1498876634,
+              "transferStatus": 1,
+              "lockable": true,
+              "state": 4,
+              "dismantlePermission": 1,
+              "overrideStyleItemHash": 2775242452,
+              "isWrapper": false,
+              "tooltipNotificationIndexes": [],
+              "versionNumber": 0
+          },
+          "privacy": 1
+      }
+  },
+  "ErrorCode": 1,
+  "ThrottleSeconds": 0,
+  "ErrorStatus": "Success",
+  "Message": "Ok",
+  "MessageData": {}
+}
