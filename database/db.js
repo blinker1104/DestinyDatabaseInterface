@@ -16,21 +16,32 @@ let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
   console.log('Connected to the DB');
 });
 
-let jsonObjs = [];
+let jsonObjs = [], itemInfo=[];
 
-db.serialize(() => {
-  db.each('SELECT id, json FROM DestinySeasonDefinition', function (err, row){
-    // console.log(row.id + ': ' + row.json + '\n');
-    // console.log(row.id + ': ' + JSON.parse(row.json) + '\n');
-    jsonObjs.push(JSON.parse(row.json));
+
+
+let routine = () => {
+  db.serialize(() => {
+    //Season Definition
+    let q = 'SELECT id, json FROM DestinySeasonDefinition';
+    db.each(q, function (err, row){
+      jsonObjs.push(JSON.parse(row.json));
+    });
+
+    q = 'SELECT id, json FROM DestinyInventoryItemDefinition';
+    db.each(q, (err, row) => {
+      // itemInfo[row.id] = (JSON.parse(row.json));
+      itemInfo.push(JSON.parse(row.json));
+    })
   });
 
-});
+}
+
+routine();
 
 
-db.close( () => {
-  console.log('JSON objs');
-  // console.log(jsonObjs[0]);
+let printSeasonInfo = () => {
+  console.log('SeasonInfo - from JSON objs'); // console.log(jsonObjs[0]);
 
   for( let o of jsonObjs ){
     if(o.index === 0){
@@ -44,8 +55,32 @@ db.close( () => {
     }
     console.log(msg);
   }
+}
 
+//Huckleberry itemHash = 2286143274
+let printItemInfo = (itemHash=2286143274) => {
+  console.log('id: ' + itemHash); // console.log(jsonObjs[0]);
+  console.log('item#: ' + itemInfo.length);
+
+  console.log('info: ');
+  let flag_search = false;
+  for ( let o of itemInfo) {
+    if( o.hash === itemHash) {
+      console.log('Item Found');
+      console.log(o);
+      flag_search = true;
+      break;
+    }
+  }
+
+}
+
+
+db.close( () => {
+  printSeasonInfo();
+  printItemInfo();
 });
+
 //module.exports = db;  // var db = require("./database.js")
 
 
