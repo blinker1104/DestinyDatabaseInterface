@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import SeasonList from './SeasonList.jsx';
+
 class AppMain extends React.Component {
 
   constructor(props) {
@@ -37,11 +39,14 @@ class AppMain extends React.Component {
     return (
       <div className="main">
         App Main section
-        <button onClick={this.getSeasonInfo}> Get Season Info</button>
+        <button onClick={this.getSeasonInfo}> Show Season Info</button>
         <div className="info" id="div_info">
           Please click the button to get update on season info.
 
-          <p>{this.state.seasonInfo.length}</p>
+          {/* <p>{this.state.seasonInfo.length}</p> */}
+          {this.state.seasonInfo ?
+            <SeasonList info={this.state.seasonInfo}/> : 'NO DATA'
+          }
         </div>
       </div>);
   }
