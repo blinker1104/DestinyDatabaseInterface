@@ -9,9 +9,13 @@ class AppMain extends React.Component {
     super(props);
 
     this.state = {
-      seasonInfo: []
+      seasonInfo: [],
+      seasonInfoVisible: false,
+      WeaponInfo: [],
+      WeaponInfoVisible: false
     };
     this.getSeasonInfo = this.getSeasonInfo.bind(this);
+    this.getWeaponInfo = this.getWeaponInfo.bind(this);
   }
 
   componentDidMount() {
@@ -20,17 +24,64 @@ class AppMain extends React.Component {
   }
 
   getSeasonInfo() {
-    console.log('button clicked');
-    axios.get('/getSeasons')
-      .then((res) => {
-        console.log('response received');
-        console.log(res);
-        this.setState({
-          seasonInfo: res.data
+    console.log('Season Info button clicked ' + this.state.seasonInfoVisible);
+
+    if(!this.state.seasonInfoVisible){
+
+      if(this.state.seasonInfo.length === 1){
+        axios.get('/getSeasons')
+        .then((res) => {
+          console.log('getSeason - response received' + res);
+          // Load SeasonInfo from server DB
+          this.setState({
+            seasonInfo: res.data,
+            seasonInfoVisible: true
+          });
         });
-        console.log('state');
-        console.log(this.state.seasonInfo);
+      } else {
+        //Toggle View - On
+        this.setState({
+          seasonInfoVisible: true
+        });
+      }
+    } else {
+      // Toggle View - Off
+      this.setState({
+        seasonInfoVisible: false
       });
+    }
+  }
+
+
+
+  getWeaponInfo() {
+    console.log('Weapon Info button clicked ' + this.state.weaponInfoVisible);
+
+    if(!this.state.weaponInfoVisible){
+
+      if(this.state.weaponInfo.length === 1){
+        axios.get('/getSeasons')
+        .then((res) => {
+          console.log('getSeason - response received' + res);
+          // Load SeasonInfo from server DB
+          this.setState({
+            weaponInfo: res.data,
+            weaponInfoVisible: true
+          });
+        });
+      } else {
+        //Toggle View - On
+        this.setState({
+          weaponInfoVisible: true
+        });
+      }
+    } else {
+      // Toggle View - Off
+      this.setState({
+        weaponInfoVisible: false
+      });
+    }
+
   }
 
 
@@ -38,16 +89,29 @@ class AppMain extends React.Component {
   render() {
     return (
       <div className="main">
-        App Main section
-        <button onClick={this.getSeasonInfo}> Show Season Info</button>
-        <div className="info" id="div_info">
-          Please click the button to get update on season info.
+        DI menu
+        <div>
+          <div className="info" id="div_info">
+            <button onClick={this.getSeasonInfo}>
+              {this.state.seasonInfoVisible ? "Show " : "Hide "} Season Info </button>
 
-          {/* <p>{this.state.seasonInfo.length}</p> */}
-          {this.state.seasonInfo ?
-            <SeasonList info={this.state.seasonInfo}/> : 'NO DATA'
-          }
+            {/* <p>{this.state.seasonInfo.length}</p> */}
+            {this.state.seasonInfoVisible ?
+              <SeasonList info={this.state.seasonInfo}/> : ''
+            }
+          </div>
+
+          <div className="info" id="div_info">
+            <button onClick={this.getWeaponInfo}>
+              Show Equipped Weapons Info </button>
+
+            {/* <p>{this.state.seasonInfo.length}</p> */}
+            {this.state.WeaponInfoVisible ?
+              <WeaponList info={this.state.weaponInfo}/> : ''
+            }
+          </div>
         </div>
+
       </div>);
   }
 }
