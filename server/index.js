@@ -18,8 +18,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => { res.send('hello')});
 
 
+app.get('/getSeasons', (req, res) => {
+  db.getSeasons()
+    .then(r => {res.send(r)});
+});
+
+
 app.listen(port, () => {
-  console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n` + `${db.printSeasonInfo()}`)
+  console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n`
+  )
 
 });
 
+
+//+ `${db.printSeasons()}`

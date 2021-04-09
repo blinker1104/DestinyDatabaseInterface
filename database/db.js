@@ -47,9 +47,9 @@ db.itemInfo = [];
 // routine();
 
 
-db.printSeasonInfo = () => {
+db.getSeasons = () => {
 
-  let q = 'SELECT * FROM DestinySeasonDefinition';
+  let q = 'SELECT json FROM DestinySeasonDefinition';
 
   return new Promise( (resolve, reject) => {
 
@@ -58,20 +58,28 @@ db.printSeasonInfo = () => {
         console.log(err);
         reject(err);
       } else {
-        resolve(res);
+        let jsonObj = [];
+        for (let o of res) {
+          jsonObj.push(JSON.parse(o.json));
+        }
+        // resolve(res);
+        resolve(jsonObj);
       }
     });
   });
 }
 
 
-
-db.printSeasonInfo()
+//Sample Info
+db.printSeasons = () => {
+  db.getSeasons()
   .then(res => {
 
     console.log(res[0]);
     console.log(res[1]);
   });
+};
+
 
 //Huckleberry itemHash = 2286143274
 //Posterity itemHash   = 3281285075
