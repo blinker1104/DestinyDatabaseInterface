@@ -8,20 +8,15 @@ let sqlite3 = require('sqlite3').verbose();
 // let db_en = 'world_sql_content/world_sql_content_95411fe3f93a8c687c6eab50c0e5c445.content';
 const path = require('path');
 let db_en = path.join(__dirname,'world_sql_content/world_sql_content.db');
-let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
-  if (err) {
-    console.log('filepath: ' + db_en);
-    console.error(err.message);
-  }
-  console.log('Connected to the DB');
-});
 
-let jsonObjs = [], itemInfo=[];
 
 
 
 let routine = () => {
   db.serialize(() => {
+
+    console.log('db serialization');
+
     //Season Definition
     let q = 'SELECT id, json FROM DestinySeasonDefinition';
     db.each(q, function (err, row){
@@ -32,30 +27,59 @@ let routine = () => {
     db.each(q, (err, row) => {
       // itemInfo[row.id] = (JSON.parse(row.json));
       itemInfo.push(JSON.parse(row.json));
-    })
+    });
   });
-
 }
 
-routine();
 
 
-let printSeasonInfo = () => {
-  console.log('SeasonInfo - from JSON objs'); // console.log(jsonObjs[0]);
-
-  for( let o of jsonObjs ){
-    if(o.index === 0){
-      continue;
-    }
-    let msg = o.seasonNumber + ' ' ;
-    if(o.redacted ){
-      msg += ' [redacted]';
-    } else {
-      msg += o.displayProperties.name;
-    }
-    console.log(msg);
+let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.log('filepath: ' + db_en);
+    console.error(err.message);
   }
+  console.log('Connected to the DB');
+});
+
+db.jsonObjs = [];
+db.itemInfo = [];
+
+// routine();
+
+
+db.getSeasons = () => {
+
+  let q = 'SELECT json FROM DestinySeasonDefinition';
+
+  return new Promise( (resolve, reject) => {
+
+    db.all(q, [], (err, res) => {
+      if ( err ) {
+        console.log(err);
+        reject(err);
+      } else {
+        let jsonObj = [];
+        for (let o of res) {
+          jsonObj.push(JSON.parse(o.json));
+        }
+        // resolve(res);
+        resolve(jsonObj);
+      }
+    });
+  });
 }
+
+
+//Sample Info
+db.printSeasons = () => {
+  db.getSeasons()
+  .then(res => {
+
+    console.log(res[0]);
+    console.log(res[1]);
+  });
+};
+
 
 //Huckleberry itemHash = 2286143274
 //Posterity itemHash   = 3281285075
@@ -79,12 +103,12 @@ let printItemInfo = (itemHash=3281285075) => {
 
 
 
-db.close( () => {
-  printSeasonInfo();
-  printItemInfo();
-});
+// db.close( () => {
+//   printSeasonInfo();
+//   printItemInfo();
+// });
 
-//module.exports = db;  // var db = require("./database.js")
+module.exports = db;  // var db = require("./database.js")
 
 
 
