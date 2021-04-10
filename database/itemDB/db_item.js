@@ -13,12 +13,25 @@ class ItemDB {
   }
 
   createTable() {
-    let q_i = `CREATE TABLE IF NOT EXISTS itemDB (
+    let q = `CREATE TABLE IF NOT EXISTS itemDB (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
       hasIcon INTEGER NOT NULL,
       icon TEXT)`;
-    return this.dao.run(q_i);
+    return this.dao.run(q);
+  }
+
+  dropTable() {
+    let q = `DROP TABLE IF EXISTS itemDB`;
+    return this.dao.run(q);
+  }
+
+  init() {
+    return this.dropTable()
+      .then(()=>{
+        console.log('ITEM DB - init');
+        return this.createTable();
+      });
   }
 
   create(id, name, hasIcon, icon){
@@ -31,12 +44,13 @@ class ItemDB {
   getById(id) {
     return this.dao.get(
       `SELECT * FROM itemDB WHERE id = ?`,
-      [id] );
+      id );
   }
 
   getAll() {
     return this.dao.all(`SELECT * FROM itemDB`);
   }
+
 }
 
 module.exports = ItemDB;

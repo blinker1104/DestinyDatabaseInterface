@@ -30,7 +30,7 @@ class D2ItemDAO {
       })
     });
   }
-  get(q, params = []) {
+  get(sql, params = []) {
     return new Promise( (resolve, reject) => {
       this.db.get(sql, params, (err, result) => {
         if (err) {
