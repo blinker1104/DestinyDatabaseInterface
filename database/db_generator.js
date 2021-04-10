@@ -1,6 +1,7 @@
 // let fs = require('fs');
 
-let sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
+const Promise = require('bluebird');
 // let db = new sqlite3.Database(':memory:');
 // let db_en = 'world_sql_content/world_sql_content_95411fe3f93a8c687c6eab50c0e5c445.content';
 const path = require('path');
@@ -11,12 +12,26 @@ let db_item = path.join(__dirname,'simplified_content/itemDB.db');
 
 
 
+let itemDB_initTable = () => {
+  let q = '';
+}
+
+
 let itemDB_generator = () => {
 
 
+  // //Huckleberry itemHash = 2286143274
+  // //Posterity itemHash   = 3281285075
+  // //Astral Horizon itemHash = 1697682876
 
-
-
+  //Manifest
+  let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+      console.log('filepath: ' + db_en);
+      console.error(err.message);
+    }
+    console.log('Connected to the ManifestInventoryDB');
+  });
 
   //Item DB
   let itemDb = new sqlite3.Database(db_item, sqlite3.OPEN_READWRITE, (err) => {
@@ -24,94 +39,54 @@ let itemDB_generator = () => {
       console.log('filepath: ' + db_item);
       console.error(err.message);
     }
+
     console.log('Connected to the itemDB');
   });
 
+  db.serialize(() => {
 
-  // //Huckleberry itemHash = 2286143274
-  // //Posterity itemHash   = 3281285075
-  // //Astral Horizon itemHash = 1697682876
-  // // let printItemInfo = (itemHash=1697682876) => {
-  // db.printItemInfo_Safe = (itemHash=1697682876) => {
+    //db_item - init
+    // init - cleanup
 
-  //   console.log('id: ' + itemHash);
-
-  //   q = 'SELECT json FROM DestinyInventoryItemDefinition';
-  //   db.all(q, [], (err, res) => {
-
-  //     db.itemInfo = [];
-  //     console.log(res.length);
-
-  //     for( let o of res) {
-  //       db.itemInfo.push(JSON.parse(o.json));
-  //     }
-
-  //     console.log('info: ');
-  //     let flag_search = false;
-  //     for ( let o of db.itemInfo) {
-  //       if( o.hash === itemHash) {
-  //         console.log('Item Found');
-  //         console.log(o);
-  //         flag_search = true;
-  //         break;
-  //       }
-  //     }
-  //     if(!flag_search) {
-  //       console.log('Item Not Found');
-  //     }
-  //   });
-  // };
+    // if()
+    let q_i = `CREATE TABLE IF NOT EXISTS itemDB (
+      id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL,
+      hasIcon INTEGER NOT NULL,
+      icon TEXT
+      )`;
+    db_item.run(q_i);
 
 
-  let initItemDB = () => {
+    let q = 'SELECT json FROM DestinyInventoryItemDefinition';
 
-      //Manifest
-    let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
-      if (err) {
-        console.log('filepath: ' + db_en);
-        console.error(err.message);
+
+    db.each(q, (err, row) => {
+      const r = JSON.parse(row.json);
+      if(r.inventory.isInstanceItem) {
+        // Item DB format
+        let t = {
+          id:       r.hash,
+          name:     r.displayProperties.name,
+          hasIcon: (r.displayProperties.hasIcon ? 1 : 0),
+          icon:     r.displayProperties.icon
+        };
+
+        db_item.run('INSERT INTO itemDB(id, name, hasIcon, icon) VALUES (?, ?, ?, ?)', [t.id, t.name, t.hasIcon, t.icon ] , (err) => {
+          if(err) {
+            return console.log(err.message);
+          }
+          console.log( 'item ' t.name + ' added to ItemDB');
+        });
+
       }
-      console.log('Connected to the ManifestInventoryDB');
     });
 
-    db.serialize(() => {
-      q = 'SELECT json FROM DestinyInventoryItemDefinition';
-      db.all(q, [], (err, res) => {
-        let itemInfo = [];
-        let itemData = [];
-        for( let o of res) {
-          itemInfo.push(JSON.parse(o.json));
-        }
+  });
 
+  db.close();
+  itemDb.close();
 
-        let counter = 0;
-        for ( let o of itemInfo) {
-          if(o.inventory.isInstanceItem){
-
-            // Item DB format
-            let temp = {
-              id:       o.hash,
-              name:     o.displayProperties.name,
-              hasIcon:  o.displayProperties.hasIcon,
-              icon:     o.displayProperties.icon
-            };
-
-            console.log(temp);
-            counter ++;
-          }
-          if(counter > 100) {
-            break;
-          }
-        }
-
-
-      });
-
-      db.close();
-    });
-  };
-
-  initItemDB();
 };
 
 

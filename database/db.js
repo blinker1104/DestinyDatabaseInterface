@@ -97,32 +97,11 @@ db.printSeasons = () => {
 //Posterity itemHash   = 3281285075
 //Astral Horizon itemHash = 1697682876
 // let printItemInfo = (itemHash=1697682876) => {
-db.printItemInfo = (itemHash=4037745684) => {
-
-  // routine();
-
-  console.log('id: ' + itemHash); // console.log(jsonObjs[0]);
-  console.log('item#: ' + db.itemInfo.length);
-
-  console.log('info: ');
-  let flag_search = false;
-  for ( let o of db.itemInfo) {
-    if( o.hash === itemHash) {
-      console.log('Item Found');
-      console.log(o);
-      flag_search = true;
-      break;
-    }
-  }
-}
-
-
-
 db.printItemInfo_Safe = (itemHash=1697682876) => {
 
   // routine();
 
-  console.log('id: ' + itemHash); // console.log(jsonObjs[0]);
+  console.log('id: ' + itemHash);
 
   q = 'SELECT json FROM DestinyInventoryItemDefinition';
   db.all(q, [], (err, res) => {
