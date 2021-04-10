@@ -60,7 +60,7 @@ class AppMain extends React.Component {
     if(!this.state.weaponInfoVisible){
 
       if(this.state.weaponInfo.length === 1){
-        axios.get('/getSeasons')
+        axios.get('/getWeapons')
         .then((res) => {
           console.log('getSeason - response received' + res);
           // Load SeasonInfo from server DB

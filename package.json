@@ -6,6 +6,7 @@
     "start": "node ./server/index.js",
     "test": "nodemon ./server/index.js",
     "db_test": "node ./database/db.js",
+    "db_generator": "node ./database/db_generator.js",
     "build": "webpack --mode=development",
     "react-dev": "webpack --mode=development"
   },
