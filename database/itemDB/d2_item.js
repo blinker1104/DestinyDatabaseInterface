@@ -2,12 +2,10 @@
 
 class D2ItemDB {
   constructor(dao) {
-    console.log('D2 ITEM DB connection?');
     this.dao = dao;
   }
 
   getAll() {
-    console.log('getALL!');
     return this.dao.all(`SELECT * FROM DestinyInventoryItemDefinition`);
   }
 }

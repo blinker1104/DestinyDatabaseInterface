@@ -1,10 +1,3 @@
-const sqlite3 = require('sqlite3').verbose();
-const Promise = require('bluebird');
-const path = require('path');
-
-let db_item = path.join(__dirname,'./itemDB.db');
-
-
 //DB Object
 
 class ItemDB {
@@ -16,6 +9,7 @@ class ItemDB {
     let q = `CREATE TABLE IF NOT EXISTS itemDB (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
+      type TEXT,
       hasIcon INTEGER NOT NULL,
       icon TEXT)`;
     return this.dao.run(q);
@@ -27,18 +21,18 @@ class ItemDB {
   }
 
   init() {
+    console.log('ITEM DB - init');
     return this.dropTable()
       .then(()=>{
-        console.log('ITEM DB - init');
         return this.createTable();
       });
   }
 
-  create(id, name, hasIcon, icon){
+  create(id, name, type, hasIcon, icon){
     return this.dao.run(
-      `INSERT INTO itemDB (id, name, hasIcon, icon)
-        VALUES (?, ?, ?, ?)`,
-      [id, name, hasIcon, icon] );
+      `INSERT INTO itemDB (id, name, type, hasIcon, icon)
+        VALUES (?, ?, ?, ?, ?)`,
+      [id, name, type, hasIcon, icon] );
   }
 
   getById(id) {

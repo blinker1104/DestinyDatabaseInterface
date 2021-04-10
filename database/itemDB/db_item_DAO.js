@@ -12,7 +12,7 @@ class ItemDAO {
       if (err) {
         console.log('Could not connect to database', err);
       } else {
-        console.log('Connected to database');
+        console.log('Connected to database - ItemDB');
       }
     })
   }
@@ -25,7 +25,7 @@ class ItemDAO {
           console.log(err);
           reject(err);
         } else {
-          resolve( {id: this.lastID} );
+          resolve( null, {id: this.lastID} );
         }
       })
     });
