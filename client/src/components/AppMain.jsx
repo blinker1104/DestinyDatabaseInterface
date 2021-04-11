@@ -16,6 +16,8 @@ class AppMain extends React.Component {
     };
     this.getSeasonInfo = this.getSeasonInfo.bind(this);
     this.getWeaponInfo = this.getWeaponInfo.bind(this);
+    this.getWeaponDetailInfo = this.getWeaponDetailInfo.bind(this);
+
   }
 
   componentDidMount() {
@@ -85,6 +87,25 @@ class AppMain extends React.Component {
   }
 
 
+  //Testing
+  getWeaponDetailInfo() {
+    console.log('Astral Horizon Data Testing');
+
+    // axios({
+    //   method:'get',
+    //   url: '/getItemDetail',
+    //   data: {
+    //     data: [
+    //       682617678, 4073514581, 1886251741, 1162525369, 1984731949, 3469836202,
+
+    //       3983457027, 1047830412, 3142289711, 3436462433, 1264398905, 4248210736, 941997506, 2697220197, 38912240
+    //     ]
+    //   },
+    //   success: (data)=>{console.log('submit completed ', data);}
+    // })
+    //   .then((res) => console.log(res.data));
+  }
+
 
   render() {
     return (
@@ -92,6 +113,11 @@ class AppMain extends React.Component {
         DI menu
         <div>
           <div className="info" id="div_info">
+
+            <button onClick={this.getWeaponDetailInfo}>
+              Weapon Detail Please </button>
+
+
             <button onClick={this.getSeasonInfo}>
               {this.state.seasonInfoVisible ? "Show " : "Hide "} Season Info </button>
 

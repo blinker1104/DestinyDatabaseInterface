@@ -10,10 +10,11 @@ const itemDAO = new ItemDAO();
 const itemDB = new ItemDB(itemDAO);
 
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 // app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,6 +37,11 @@ app.get('/getItem/:id', (req, res) => {
     });
 });
 
+// app.get('/getItemDetail', (req, res) => {
+//   // res.send(200);
+// });
+
+
 app.get('/getItemList/:items', (req, res) => {
   itemDB.getByIds(req.params.items)
     .then((result) => {
@@ -46,12 +52,9 @@ app.get('/getItemList/:items', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n`
-  );
+  console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n` );
 
 
-  itemDB.getByIds([3054949324,3142289711,1047830412,3161816588,47981717])
-    .then((result) => console.log(result));
 
 });
 
