@@ -3,7 +3,11 @@ const path = require('path');
 const app = express();
 const port = 4000;
 
-const db = require('../database/db');
+const db = require('../database/db');  // EN global - world content db
+const ItemDAO = require('../database/itemDB/db_item_DAO');
+const ItemDB = require('../database/itemDB/db_item');
+const itemDAO = new ItemDAO();
+const itemDB = new ItemDB(itemDAO);
 
 const cors = require('cors');
 
@@ -24,26 +28,18 @@ app.get('/getSeasons', (req, res) => {
 });
 
 
-app.get('/getWeapons', (req, res) => {
-  // db.getSeasons()
-  //   .then(r => {res.send(r)});
-
+app.get('/getItem/:id', (req, res) => {
+  itemDB.getById(req.params.id)
+    .then((result) => {
+      console.log('Item Search: ' + result.name);
+      res.send(result);
+    });
 });
 
-
-
-app.get('/getWeaponInfo/:itemHash', (req, res) => {
-  // db.getSeasons()
-  //   .then(r => {res.send(r)});
-});
 
 app.listen(port, () => {
   console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n`
   );
-
-  db.printItemInfo();
-
-  db.printItemInfo_Safe();
 });
 
 
