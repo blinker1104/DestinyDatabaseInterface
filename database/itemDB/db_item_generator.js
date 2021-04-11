@@ -58,7 +58,7 @@ function ItemDB_test() {
   //   });
 
   //   //ASTRAL HORIZON
-  // itemDB.getById(1697682876)
+  // itemDB.getById()
   //   .then((res) => console.log(res));
 
   // //Full Choke - 1047830412
