@@ -44,6 +44,28 @@ class ItemDAO {
     })
   }
 
+  getAll(sql, params = []) {
+    return new Promise( (resolve, reject) => {
+      let searchResult = [];
+      try {
+        this.db.serialize( ()=>{
+          for(let p of params){
+            this.db.get(sql, p, (err, result) => {
+              console.log(`itemFound: ${result.name} / ${result.id}`);
+              console.log('found#: ', searchResult.length);
+              searchResult.push(result);
+            });
+          }
+        }).then((err)=>{
+          resolve(searchResult);
+        });
+      } catch (error) {
+        console.log(`Error with getAll : ${error}`);
+      }
+
+    })
+  }
+  // SRC: https://stackoverflow.com/questions/56602443/async-await-still-running-asynchronously
   all(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, rows) => {

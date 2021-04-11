@@ -36,10 +36,23 @@ app.get('/getItem/:id', (req, res) => {
     });
 });
 
+app.get('/getItemList/:items', (req, res) => {
+  itemDB.getByIds(req.params.items)
+    .then((result) => {
+      console.log('Item Search: ' + result.name);
+      res.send(result);
+    });
+});
+
 
 app.listen(port, () => {
   console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n`
   );
+
+
+  itemDB.getByIds([3054949324,3142289711,1047830412,3161816588,47981717])
+    .then((result) => console.log(result));
+
 });
 
 

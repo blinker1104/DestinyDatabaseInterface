@@ -41,6 +41,11 @@ class ItemDB {
       id );
   }
 
+  getByIds(ids) {
+    return this.dao.all(
+      `SELECT * FROM itemDB WHERE id IN (${ids.join()})`);
+  }
+
   getAll() {
     return this.dao.all(`SELECT * FROM itemDB`);
   }
