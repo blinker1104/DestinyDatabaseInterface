@@ -30,25 +30,36 @@ app.get('/getSeasons', (req, res) => {
 
 
 app.get('/getItem/:id', (req, res) => {
+  // console.log(`request getItem: ${req.params.id}`);
   itemDB.getById(req.params.id)
-    .then((result) => {
-      console.log('Item Search: ' + result.name);
-      res.send(result);
+    .then((response) => {
+      if(response){
+        console.log('Item Search: ' + response.name);
+        console.log(response);
+      } else {
+      }
+      res.send(response);
     });
 });
 
-// app.get('/getItemDetail', (req, res) => {
-//   // res.send(200);
+
+
+app.get('/searchHash', (req, res) => {
+
+});
+
+
+// app.get('/getItemList/:items', (req, res) => {
+//   let ids = (typeof req.params.items === "number")
+//     ? [req.params.items] : req.params.items;
+
+
+//   itemDB.getByIds(req.params.items)
+//     .then((result) => {
+//       console.log('Item Search: ' + result.name);
+//       res.send(result);
+//     });
 // });
-
-
-app.get('/getItemList/:items', (req, res) => {
-  itemDB.getByIds(req.params.items)
-    .then((result) => {
-      console.log('Item Search: ' + result.name);
-      res.send(result);
-    });
-});
 
 
 app.listen(port, () => {

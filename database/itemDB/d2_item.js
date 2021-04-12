@@ -5,6 +5,8 @@ class D2ItemDB {
     this.dao = dao;
   }
 
+
+
   getAll() {
     return this.dao.all(`SELECT * FROM DestinyInventoryItemDefinition`);
   }
