@@ -196,8 +196,13 @@ function searchText(text) {
 
 
 // searchText('Masterwork');
-searchText('True Prophecy');
-searchID(2742838700);
+// searchText('True Prophecy');
+// searchID(2742838700);
+// searchID(2697220197);  // Masterwork - Range (-1597747099/DestinyInventoryItemDefinition)
+// searchID(3469836202);  // Missing (-825131094/DestinySandboxPerkDefinition)
+// searchID(3373582085);  // Kinetic DMG (-921385211/DestinyDamageTypeDefinition)
+// searchID(3983457027); // AggressiveFrame (-311510269/DestinyInventoryItemDefinition)
+// searchID(1480404414); // Attack=ItemLevel (1480404414/DestinyStatDefinition)
 
 
 /*

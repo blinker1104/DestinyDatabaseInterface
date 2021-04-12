@@ -34,8 +34,8 @@ app.get('/getItem/:id', (req, res) => {
   itemDB.getById(req.params.id)
     .then((response) => {
       if(response){
-        console.log('Item Search: ' + response.name);
-        console.log(response);
+        console.log(`Item Search: ${response.name} / ${response.id}`);
+
       } else {
       }
       res.send(response);
