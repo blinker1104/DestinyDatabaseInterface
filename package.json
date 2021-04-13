@@ -8,6 +8,7 @@
     "db_test": "node ./database/db.js",
     "db_generator": "node ./database/db_generator.js",
     "db_gen_item": "node ./database/itemDB/db_item_generator.js",
+    "dbSearch": "node ./database/itemDB/d2_all.js",
     "build": "webpack --mode=development",
     "react-dev": "webpack --mode=development"
   },

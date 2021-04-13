@@ -355,10 +355,10 @@ async function asyncSearchID2(ids){
 
 async function questionForm () {
   for(let i=0; i<24; i++){
-    const id = Number.parseInt(await askQuestion("ID please : "));
-    console.log('id: ', id);
+    const id = Number.parseInt(await askQuestion("ID please (0 to close): "));
     if(id ===  0) return;
     else {
+      console.log('id: ', id);
       const search = await asyncSearchID2(id);
       console.log(' --- result --- ');
       for(let i=0; i<search.length; i+=2){
