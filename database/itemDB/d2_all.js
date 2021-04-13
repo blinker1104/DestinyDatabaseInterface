@@ -270,28 +270,6 @@ let perkSample = [
 // searchID(1480404414); // Attack - DestinyStatDefinition
 
 
-async function askQuestion(query) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-
-  return new Promise(resolve => rl.question(query, ans => {
-    rl.close();
-    resolve(ans);
-
-    // const r = ans;
-    // if(r === '0'){
-    //   console.log('End Search');
-    //   resolve(ans);
-    // }
-    // asyncSearchID(parseInt(r))
-    //   .then(res => {
-    //     resolve(ans);
-    //   });
-  }))
-}
 
 
 // askQuestion("ID please : ")
@@ -335,25 +313,16 @@ async function asyncSearchID(ids){
 
 
 
-async function asyncSearchID2(ids){
-  // return new Promise((resolve) => {
-    let searchResult = [];
+async function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-    let id = idOverflowCheck(ids);
-    for(let t of tables){
-      let q = `SELECT * FROM ${t} WHERE id = ${id}`;
-
-      const result = await db_promise.all(q);
-      // console.log(result);
-      if(result.length > 0){
-        searchResult.push(result);
-      }
-    }
-
-    console.log('item?: ' + searchResult.length);
-    // resolve(searchResult);
-    return (searchResult);
-  // });
+  return new Promise(resolve => rl.question(query, ans => {
+    rl.close();
+    resolve(ans);
+  }))
 }
 
 // 2286143274
@@ -368,18 +337,45 @@ async function asyncSearchID2(ids){
 // searchID(2303181850);  //  Arc - DamageTypeDefinition
 
 
-async function questionForm () {
-  for(let i=0; i<4; i++){
+async function asyncSearchID2(ids){
+  let searchResult = [];
+  if(ids ===  0) return searchResult;
+  let id = idOverflowCheck(ids);
+  for(let t of tables){
+    let q = `SELECT * FROM ${t} WHERE id = ${id}`;
+    const result = await db_promise.all(q);
+    if(result.length > 0){
+      searchResult.push(t)
+      searchResult.push(result[0]);
+    }
+  }
+  return (searchResult);
+}
 
-    // console.log("ID please : ");
+
+async function questionForm () {
+  for(let i=0; i<24; i++){
     const id = Number.parseInt(await askQuestion("ID please : "));
     console.log('id: ', id);
-    const search = await asyncSearchID2(id);
-    console.log('result = ', search);
+    if(id ===  0) return;
+    else {
+      const search = await asyncSearchID2(id);
+      console.log(' --- result --- ');
+      for(let i=0; i<search.length; i+=2){
+        // console.log('from '+search[i]);
+        // console.log(search[i+1]);
+        const data_source = search[i];
+        const data = JSON.parse(search[i+1].json);
+        const name = data.displayProperties ? data.displayProperties.name : 'No Name Data';
+        console.log( '- '+name + ' / ' + data_source);
+      }
+      console.log(' --- result end --- ');
+    }
   }
-
 };
 
+
+// https://stackoverflow.com/questions/62456867/cannot-await-for-sqlite3-database-get-function-completion-in-node-js
 
 
 
