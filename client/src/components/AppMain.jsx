@@ -14,7 +14,7 @@ class AppMain extends React.Component {
     super(props);
 
     this.state = {
-      userID: '4611686018468660527',
+      userId: '4611686018468660527',
       seasonInfo: [],
       seasonInfoVisible: false,
       WeaponInfo: [],
@@ -176,7 +176,7 @@ class AppMain extends React.Component {
                 Weapon Detail Please </button>
             </div> */}
 
-            <CharacterList userID={this.state.userID} />
+            <CharacterList userId={this.state.userId} />
 
 
 
@@ -189,15 +189,15 @@ class AppMain extends React.Component {
             }
           </div>
 
-          <div className="info" id="div_info">
+          {/* <div className="info" id="div_info">
             <button onClick={this.getWeaponInfo}>
               Show Equipped Weapons Info </button>
 
-            {/* <p>{this.state.seasonInfo.length}</p> */}
+
             {this.state.WeaponInfoVisible ?
               <WeaponList info={this.state.weaponInfo}/> : ''
             }
-          </div>
+          </div> */}
         </div>
 
       </div>);

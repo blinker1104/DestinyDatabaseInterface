@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import SeasonList from './SeasonList.jsx';
+import WeaponList from './WeaponList.jsx';
 
 const APIkey = require('../API/BungieAPI.js');
 //https://www.bungie.net/platform/Destiny2/3/Profile/~/?components=100
@@ -23,8 +23,9 @@ class CharacterList extends React.Component {
     super(props);
 
     this.state = {
-      userID: props.userID,
-      characterID: [],
+      userId: props.userId,
+      characterIds: [],
+      idReady: false
     };
     this.getCharacterInfo = this.getCharacterInfo.bind(this);
 
@@ -34,53 +35,58 @@ class CharacterList extends React.Component {
   componentDidMount() {
     console.log('Character List');
     console.log(APIkey);
-    this.getCharacterInfo();
+
+    this.setState({
+      characterIds :
+        ["2305843009359234351",
+        "2305843009390224534",
+        "2305843009691294507"],
+      idReady : true
+    });
+
+    // this.getCharacterInfo();
   }
 
 
   getCharacterInfo() {
     console.log('get character info');
-    const id = this.state.userID;
+    const id = this.state.userId;
     const URL =  bungieCharURL+profile_steam+id+profile_component;
 
-    axios(
-      {
+    axios({
         method : 'get',
         url : URL,
-        headers : {
-          'X-API-Key' :  APIkey.value
-          // ,'OriginHeaderDoesNotMatchKey' : '*'
-        }
-
+        headers : {'X-API-Key' :  APIkey.value}
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data.Response.profile.data.characterIds);
+        const ids = res.data.Response.profile.data.characterIds;
+        this.setState({
+          characterIds : ids,
+          idReady: true
+        });
       })
       .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
+        console.log('Error', error.message);
         console.log(error.config);
       });
   }
 
 
   render() {
+    const idSet = {
+      cid : this.state.characterIds[0],
+      uid :this.state.userId
+    };
     return (
       <div>
-        CharacterList : {'Hello'}
+        CharacterList
+        {this.state.idReady ?
+          <WeaponList
+            ids = {idSet}
+            /> : ''
+        }
+
       </div>
     );
   }

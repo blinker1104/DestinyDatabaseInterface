@@ -1,11 +1,23 @@
 // SEARCH ALL DB in D2 Content
 
 
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
+const { open } = require('sqlite');
 const path = require('path');
 
-const d2_db = path.join(__dirname,'world_sql_content.db');
-const db = new sqlite3.Database(d2_db);
+
+const readline = require('readline');
+
+sqlite3.verbose();
+const d2_db_path = path.join(__dirname,'world_sql_content.db');
+const db = new sqlite3.Database(d2_db_path);
+
+let db_promise;
+(async () => {
+  db_promise = await open({
+    filename: d2_db_path,
+    driver: sqlite3.Database});
+  })();
 
 let tables = [
   'DestinyEnemyRaceDefinition',
@@ -225,7 +237,165 @@ let perkSample = [
 
 */
 
+/*
 
+
+2286143274
+3281285075
+4230965989
+1321354572
+4194072668
+4177973942
+2054979724
+1021060724
+*/
+
+
+//1021060724 // Hunter Cloak
+//1106697451 // GHOST SHELL // tyrantShell
+//3317837688 // Vehicle
+//1748147691 // SHIP  // 284967655(BucketHash)
+//873720784 // Revenant - Hunter Subclass
+//684040282 // ClanBanner
+//3605230075 // EMBLEM - VEIST UPGRADE
+//152583919  //  finisher
+//3183180185 // EMOTE
+//3234265291 // Artifact - Bell of Conquest
+
+
+
+// searchID(2465295065); //EnergyWeapon
+// searchID(3281285075); // Posterity
+// searchID(2303181850);  //  Arc - DamageTypeDefinition
+// searchID(1480404414); // Attack - DestinyStatDefinition
+
+
+async function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+
+  return new Promise(resolve => rl.question(query, ans => {
+    rl.close();
+    resolve(ans);
+
+    // const r = ans;
+    // if(r === '0'){
+    //   console.log('End Search');
+    //   resolve(ans);
+    // }
+    // asyncSearchID(parseInt(r))
+    //   .then(res => {
+    //     resolve(ans);
+    //   });
+  }))
+}
+
+
+// askQuestion("ID please : ")
+//     .then((res) => {
+//         console.log(Number.parseInt(res));
+//         let id = Number.parseInt(res);
+//         console.log(id);
+//         // searchID(id);
+//     });
+
+
+async function asyncSearchID(ids){
+  let searchResult = [];
+
+  if(typeof ids === "number"){
+    let id = idOverflowCheck(ids);
+    db.serialize(() => {
+      for(let t of tables){
+        let q = `SELECT * FROM ${t} WHERE id = ${id}`;
+        db.get(q, [], (err, res) => {
+            if(err) {
+              console.log('Error running sql ' + q);
+              console.log(err);
+            } else {
+            if (res !== undefined){
+              console.log('item found: ' + t);
+              searchResult.push(res);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  console.log('item?: ' + searchResult);
+  return new Promise((resolve) => {
+    console.log('item: ' + searchResult);
+    resolve(searchResult);
+  });
+}
+
+
+
+async function asyncSearchID2(ids){
+  // return new Promise((resolve) => {
+    let searchResult = [];
+
+    let id = idOverflowCheck(ids);
+    for(let t of tables){
+      let q = `SELECT * FROM ${t} WHERE id = ${id}`;
+
+      const result = await db_promise.all(q);
+      // console.log(result);
+      if(result.length > 0){
+        searchResult.push(result);
+      }
+    }
+
+    console.log('item?: ' + searchResult.length);
+    // resolve(searchResult);
+    return (searchResult);
+  // });
+}
+
+// 2286143274
+// 3281285075
+// 4230965989
+// 1321354572
+// 4194072668
+// 4177973942
+// 2054979724
+// 1021060724
+
+// searchID(2303181850);  //  Arc - DamageTypeDefinition
+
+
+async function questionForm () {
+  for(let i=0; i<4; i++){
+
+    // console.log("ID please : ");
+    const id = Number.parseInt(await askQuestion("ID please : "));
+    console.log('id: ', id);
+    const search = await asyncSearchID2(id);
+    console.log('result = ', search);
+  }
+
+};
+
+
+
+
+
+
+// let i = 0;
+// while(i++ < 10){
+//   console.log(questionForm());
+// }
+// console.log(questionForm());
+questionForm();
+
+//   questionForm().then((res)=>{console.log(res)});
+//   questionForm().then((res)=>{console.log(res)});
+//   questionForm().then((res)=>{console.log(res)});
+//SRC:https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
 
 /*
 
@@ -276,6 +446,7 @@ let perkSample = [
 
 
 /*
+
 
 Astral Horizon
 {
