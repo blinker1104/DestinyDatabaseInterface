@@ -75,7 +75,7 @@ class CharacterList extends React.Component {
 
   render() {
     const idSet = {
-      cid : this.state.characterIds[0],
+      cid : this.state.characterIds[2],
       uid :this.state.userId
     };
     return (

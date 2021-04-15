@@ -71,7 +71,7 @@ class ItemInfo extends React.Component {
     // 5: Shader
     // 8: Tracker(PVE/PVP)
 
-    iconIds[0] = this.state.itemId;
+    // iconIds[0] = this.state.itemId;
     this.getPerkInfo();
 
   }
@@ -125,7 +125,8 @@ class ItemInfo extends React.Component {
     .then((res) => {
       // console.log('Perks - '+ itemId + '/'+ instanceId);
       // console.log(res.data);
-      const perks = res.data.Response.sockets.data.sockets;
+      const perks = res.data.Response.sockets.data ?
+        res.data.Response.sockets.data.sockets : [];
 
       // console.log(perks);
       this.state.perks = perks;
@@ -167,20 +168,24 @@ class ItemInfo extends React.Component {
 
     let iconUrls=  [];
     iconUrls[0] = itemId;
-    for(let i=0; i<iconOrder.length; i++) {
-      iconUrls[i+1] = this.state.perks[i].plugHash ?
-        this.state.perks[i].plugHash : 0;
+    if(this.state.perks){
+      // console.log(this.state.perks);
+
+      for(let i=0; i<this.state.perks.length; i++) {
+        iconUrls[i+1] = this.state.perks[i].isEnabled ?
+          this.state.perks[i].plugHash : 0;
+      }
     }
     const icons = iconUrls.join();
-    console.log('icons: ' + icons);
+    // console.log('icons: ' + icons);
 
     axios.get('/getItems/' + icons)
       .then((response)=>{
         if(response.data){
-
+          iconUrls = [];
           for(let i=0; i<response.data.length; i++){
             const url = response.data[i].icon;
-            iconUrls[i] = url ? bungieBaseURL + url : '';
+            iconUrls.push(url ? bungieBaseURL + url : '');
           }
           this.setState({
             itemReady: true,
@@ -196,12 +201,19 @@ class ItemInfo extends React.Component {
   //-46304806 = Empty Socket
   //-2146672205
 
+
+  // 2768425135
+
+
+  // - Kinetic Weapon
+
+
   render() {
 
 
-    if(this.state.itemReady)
-      console.log(this.state.iconUrls.length);
-    console.log('Icon Urls');
+    // if(this.state.itemReady)
+    //   console.log(this.state.iconUrls.length);
+    // console.log('Icon Urls');
 
     const iconsIds = this.state.itemReady ? this.state.iconUrls.map( (url) => {
       // console.log(url);
@@ -211,7 +223,7 @@ class ItemInfo extends React.Component {
         width: '50px',
         height: '50px' }}
         src={url} />);
-    }) : 'No Data';
+    }) : 'Loading';
 
     // if(!this.state.equipmentReady) {
     //   return (<div>No Equipment Info</div>);
