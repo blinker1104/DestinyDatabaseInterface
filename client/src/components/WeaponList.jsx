@@ -11,6 +11,7 @@ const profile_steam = '3/Profile/';
 const option_char = '/Character/';
 const equipment_component = '?components=205';
 
+
 // https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Character/2305843009359234351/?components=205
 
 class WeaponList extends React.Component {

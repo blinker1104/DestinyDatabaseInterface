@@ -33,7 +33,7 @@ class AppMain extends React.Component {
   componentDidMount() {
     console.log('will this be printed?');
     this.state.seasonInfo[0] = 'no data';
-    this.getWeaponDetailInfo();
+    // this.getWeaponDetailInfo();
   }
 
   getSeasonInfo() {

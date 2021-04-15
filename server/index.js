@@ -31,6 +31,7 @@ app.get('/getSeasons', (req, res) => {
 
 app.get('/getItem/:id', (req, res) => {
   // console.log(`request getItem: ${req.params.id}`);
+  // res.end();
   itemDB.getById(req.params.id)
     .then((response) => {
       if(response){
@@ -40,6 +41,7 @@ app.get('/getItem/:id', (req, res) => {
       }
       res.send(response);
     });
+
 });
 
 
@@ -49,18 +51,25 @@ app.get('/searchHash', (req, res) => {
 });
 
 
-// app.get('/getItemList/:items', (req, res) => {
-//   let ids = (typeof req.params.items === "number")
-//     ? [req.params.items] : req.params.items;
 
 
-//   itemDB.getByIds(req.params.items)
-//     .then((result) => {
-//       console.log('Item Search: ' + result.name);
-//       res.send(result);
-//     });
-// });
+app.get('/getItems/:items', (req, res) => {
+  let ids = req.params.items;  // TextFormat
+  //  432476743,1294026524,3250034553,1561002382,706527188,3108830275,1363705634,3336648220
 
+  itemDB.getByIds(ids)
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch(err => {
+      res.status(400).end(err);
+    });
+});
+
+
+
+//432476743,1294026524,3250034553,1561002382,706527188,3108830275,1363705634,3336648220
+//http://localhost:4000/getItemList/[432476743,1294026524,3250034553,1561002382,706527188,3108830275,1363705634,3336648220]
 
 app.listen(port, () => {
   console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n` );

@@ -12,6 +12,9 @@ const option_item = '/Item/';
 const equipment_component = '?components=205';
 const perk_component = '?components=305';
 
+
+const hash_emptySocket = 4248662490;
+
 // https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529301468312674/?components=300
 
 // https://www.bungie.net/platform/Destiny2/3/Profile/4611686018468660527/Item/6917529301468312674/?components=305
@@ -161,51 +164,48 @@ class ItemInfo extends React.Component {
 
     const iconOrder = [0,6,7,1,2,3,4];
     const itemId = this.state.itemId;
+
     let iconUrls=  [];
     iconUrls[0] = itemId;
     for(let i=0; i<iconOrder.length; i++) {
-      iconUrls[i+1] = this.state.perks[i].plugHash;
+      iconUrls[i+1] = this.state.perks[i].plugHash ?
+        this.state.perks[i].plugHash : 0;
     }
-    console.log(iconUrls.join());
+    const icons = iconUrls.join();
+    console.log('icons: ' + icons);
 
-    const len = iconUrls.length;
-    for (let i =0; i< len; i++) {
-      const p = iconUrls[i];
-      axios.get('/getItem/' + p)
-        .then((response)=>{
-          if(response.data){
-            iconUrls[i] = bungieBaseURL + response.data.icon;
-            console.log('icon: ',iconUrls[i]);
+    axios.get('/getItems/' + icons)
+      .then((response)=>{
+        if(response.data){
 
-            this.setState({
-              itemReady: true,
-              iconUrls: iconUrls
-            });
+          for(let i=0; i<response.data.length; i++){
+            const url = response.data[i].icon;
+            iconUrls[i] = url ? bungieBaseURL + url : '';
+          }
+          this.setState({
+            itemReady: true,
+            iconUrls: iconUrls
+          });
 
           }
-        });
-    }
-
-
-
+      });
   }
+
+
+  // 4248662490-4294967296
+  //-46304806 = Empty Socket
+  //-2146672205
 
   render() {
 
-    // const icons_slot0 = this.state.iconIds.map( (url)=>{
-    //   return (<img  style={{
-    //     backgroundColor: 'gray',
-    //     width: '50px',
-    //     height: '50px' }}
-    //     src={url} />);
-    // });
 
     if(this.state.itemReady)
       console.log(this.state.iconUrls.length);
     console.log('Icon Urls');
 
     const iconsIds = this.state.itemReady ? this.state.iconUrls.map( (url) => {
-      console.log(url);
+      // console.log(url);
+      if(!url || url === hash_emptySocket) return('');
       return (<img  style={{
         backgroundColor: 'gray',
         width: '50px',
@@ -227,7 +227,6 @@ class ItemInfo extends React.Component {
 
     return (
       <div className="WeaponList">
-        <h5>Item Info </h5>
         {iconsIds}
       </div>
     );

@@ -105,6 +105,8 @@ function idOverflowCheck(n) {
 }
 
 function searchID(ids) {
+  console.log(ids);
+  console.log(typeof ids);
   if(typeof ids === "number"){
     let id = idOverflowCheck(ids);
     db.serialize(() => {
@@ -124,7 +126,7 @@ function searchID(ids) {
       }
     });
 
-  } else if (typeof ids === "object") {
+  } else if (Array.isArray(ids)) {
     db.serialize(() => {
       for(let t of tables){
         for(let i of ids) {
@@ -148,7 +150,9 @@ function searchID(ids) {
         }
       }
     });
-
+  } else {
+    // searchText(ids);
+    searchText('Catalyst')
   }
 }
 
@@ -337,17 +341,22 @@ async function askQuestion(query) {
 // searchID(2303181850);  //  Arc - DamageTypeDefinition
 
 
-async function asyncSearchID2(ids){
+async function asyncSearchID2(input){
+  const ids = Number.parseInt(input);
   let searchResult = [];
   if(ids ===  0) return searchResult;
-  let id = idOverflowCheck(ids);
-  for(let t of tables){
-    let q = `SELECT * FROM ${t} WHERE id = ${id}`;
-    const result = await db_promise.all(q);
-    if(result.length > 0){
-      searchResult.push(t)
-      searchResult.push(result[0]);
+  if(typeof ids === "number"){
+    let id = idOverflowCheck(ids);
+    for(let t of tables){
+      let q = `SELECT * FROM ${t} WHERE id = ${id}`;
+      const result = await db_promise.all(q);
+      if(result.length > 0){
+        searchResult.push(t)
+        searchResult.push(result[0]);
+      }
     }
+  } else {
+    searchText(ids);
   }
   return (searchResult);
 }
@@ -355,11 +364,11 @@ async function asyncSearchID2(ids){
 
 async function questionForm () {
   for(let i=0; i<24; i++){
-    const id = Number.parseInt(await askQuestion("ID please (0 to close): "));
-    if(id ===  0) return;
+    const searchWord = await askQuestion("ID please (0 to close): ");
+    if(searchWord ===  '0') return;
     else {
-      console.log('id: ', id);
-      const search = await asyncSearchID2(id);
+      console.log('Search Keyword: ', searchWord);
+      const search = await asyncSearchID2(searchWord);
       console.log(' --- result --- ');
       for(let i=0; i<search.length; i+=2){
         // console.log('from '+search[i]);
@@ -368,6 +377,7 @@ async function questionForm () {
         const data = JSON.parse(search[i+1].json);
         const name = data.displayProperties ? data.displayProperties.name : 'No Name Data';
         console.log( '- '+name + ' / ' + data_source);
+        console.log(data);
       }
       console.log(' --- result end --- ');
     }
