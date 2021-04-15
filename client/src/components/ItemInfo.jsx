@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const APIkey = require('../API/BungieAPI.js');
 
+const bungieBaseURL = 'https://www.bungie.net';
 const bungieURL = 'https://www.bungie.net/platform/Destiny2/';
 const profile_xbox  = '1/Profile/';
 const profile_psn   = '2/Profile/';
@@ -27,9 +28,10 @@ class ItemInfo extends React.Component {
       instanceId : props.ids.instanceId,
       perks: [],
       iconIds: [],
+      iconUrls : [],
       icons: []
      };
-     console.log(props);
+    //  console.log(props);
 
     this.getEquipmentInfo = this.getEquipmentInfo.bind(this);
     this.getWeaponInfo = this.getWeaponInfo.bind(this);
@@ -118,11 +120,11 @@ class ItemInfo extends React.Component {
       headers : {'X-API-Key' :  APIkey.value}
     })
     .then((res) => {
-      console.log('Perks - '+ itemId + '/'+ instanceId);
+      // console.log('Perks - '+ itemId + '/'+ instanceId);
       // console.log(res.data);
       const perks = res.data.Response.sockets.data.sockets;
 
-      console.log(perks);
+      // console.log(perks);
       this.state.perks = perks;
       // this.setState({
       //   equipment : equipment,
@@ -159,15 +161,58 @@ class ItemInfo extends React.Component {
 
     const iconOrder = [0,6,7,1,2,3,4];
     const itemId = this.state.itemId;
-
-    this.state.iconIds[0] = itemId;
+    let iconUrls=  [];
+    iconUrls[0] = itemId;
     for(let i=0; i<iconOrder.length; i++) {
-      this.state.iconIds[i+1] = this.state.perks[i].plugHash;
+      iconUrls[i+1] = this.state.perks[i].plugHash;
     }
-    console.log(this.state.iconIds.join());
+    console.log(iconUrls.join());
+
+    const len = iconUrls.length;
+    for (let i =0; i< len; i++) {
+      const p = iconUrls[i];
+      axios.get('/getItem/' + p)
+        .then((response)=>{
+          if(response.data){
+            iconUrls[i] = bungieBaseURL + response.data.icon;
+            console.log('icon: ',iconUrls[i]);
+
+            this.setState({
+              itemReady: true,
+              iconUrls: iconUrls
+            });
+
+          }
+        });
+    }
+
+
+
   }
 
   render() {
+
+    // const icons_slot0 = this.state.iconIds.map( (url)=>{
+    //   return (<img  style={{
+    //     backgroundColor: 'gray',
+    //     width: '50px',
+    //     height: '50px' }}
+    //     src={url} />);
+    // });
+
+    if(this.state.itemReady)
+      console.log(this.state.iconUrls.length);
+    console.log('Icon Urls');
+
+    const iconsIds = this.state.itemReady ? this.state.iconUrls.map( (url) => {
+      console.log(url);
+      return (<img  style={{
+        backgroundColor: 'gray',
+        width: '50px',
+        height: '50px' }}
+        src={url} />);
+    }) : 'No Data';
+
     // if(!this.state.equipmentReady) {
     //   return (<div>No Equipment Info</div>);
     // }
@@ -183,7 +228,7 @@ class ItemInfo extends React.Component {
     return (
       <div className="WeaponList">
         <h5>Item Info </h5>
-
+        {iconsIds}
       </div>
     );
   }
