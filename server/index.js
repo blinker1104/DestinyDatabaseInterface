@@ -52,14 +52,24 @@ app.get('/searchHash', (req, res) => {
 
 
 
-
 app.get('/getItems/:items', (req, res) => {
-  let ids = req.params.items;  // TextFormat
+  let items = req.params.items;  // TextFormat
   //  432476743,1294026524,3250034553,1561002382,706527188,3108830275,1363705634,3336648220
 
-  itemDB.getByIds(ids)
+  itemDB.getByIds(items)
     .then((result) => {
-      res.status(200).send(result);
+      let ids = JSON.parse(`[${items}]`);
+      let sortedResult = [];
+      for(let i of ids){
+        for(let r of result){
+          if(r.id === i){
+            sortedResult.push(r);
+            break;
+          }
+        }
+      }
+      res.status(200).send(sortedResult);
+      // [ {id, name, icon, ... }, ... ]
     })
     .catch(err => {
       res.status(400).end(err);
@@ -73,8 +83,6 @@ app.get('/getItems/:items', (req, res) => {
 
 app.listen(port, () => {
   console.log( `Path: ${(path.join(__dirname, 'public'))}\n` + `proxy listening on http://localhost:${port}\n` );
-
-
 
 });
 

@@ -74,17 +74,21 @@ class CharacterList extends React.Component {
 
 
   render() {
-    const idSet = {
-      cid : this.state.characterIds[2],
-      uid :this.state.userId
-    };
+    const displayIds = [0,1,2];  // Character ids to display
+    const WeaponSets = displayIds.map(id => {
+      const idSet = {
+        cid : this.state.characterIds[id],
+        uid :this.state.userId
+      };
+
+      return ( <WeaponList ids = {idSet} />);
+    });
     return (
       <div>
         CharacterList
         {this.state.idReady ?
-          <WeaponList
-            ids = {idSet}
-            /> : ''
+          WeaponSets
+           : ''
         }
 
       </div>

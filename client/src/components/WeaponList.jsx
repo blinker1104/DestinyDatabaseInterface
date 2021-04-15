@@ -51,8 +51,8 @@ class WeaponList extends React.Component {
       })
       .then((res) => {
         console.log(res.data.Response);
-        const equipment = res.data.Response.equipment.data.items;
-        // const equipment = res.data.Response.equipment.data.items.slice(0,2);
+        // const equipment = res.data.Response.equipment.data.items;
+        const equipment = res.data.Response.equipment.data.items.slice(0,3);
 
         this.setState({
           equipment : equipment,
