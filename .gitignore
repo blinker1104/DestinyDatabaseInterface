@@ -3,6 +3,9 @@
 *.content
 
 
+#API
+BungieAPI.js
+
 # Logs
 logs
 *.log

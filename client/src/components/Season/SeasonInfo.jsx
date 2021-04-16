@@ -3,21 +3,22 @@ import React from 'react';
 import moment from 'moment';
 
 const decodeSeasonData = (data) => {
-  console.log(data.displayProperties.name);
+
+  // console.log(data.displayProperties.name);
   const d = {};
   d.name = data.displayProperties.name;
   d.desc = data.displayProperties.description;
   d.seasonNumber = data.seasonNumber;
   d.stDate = data.startDate;
   d.endDate = data.endDate;
-  console.log('decode ' + d);
+  // console.log('decode ' + d);
   return d;
 }
 
 
 
 const SeasonInfo = ( {sData} ) => {
-  console.log('SeasonTab ' + sData);
+  // console.log('SeasonTab ' + sData);
   const s = sData ? decodeSeasonData(sData) :
     {name:'', desc:'', stDate:'', endDate:''};
 

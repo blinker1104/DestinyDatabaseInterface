@@ -12,25 +12,6 @@ let db_en = path.join(__dirname,'world_sql_content/world_sql_content.db');
 
 
 
-let routine = () => {
-  db.serialize(() => {
-
-    console.log('db serialization');
-
-    //Season Definition
-    let q = 'SELECT id, json FROM DestinySeasonDefinition';
-    db.each(q, function (err, row){
-      jsonObjs.push(JSON.parse(row.json));
-    });
-
-    q = 'SELECT id, json FROM DestinyInventoryItemDefinition';
-    db.each(q, (err, row) => {
-      // itemInfo[row.id] = (JSON.parse(row.json));
-      itemInfo.push(JSON.parse(row.json));
-    });
-  });
-}
-
 
 
 let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
@@ -43,6 +24,37 @@ let db = new sqlite3.Database(db_en, sqlite3.OPEN_READWRITE, (err) => {
 
 db.jsonObjs = [];
 db.itemInfo = [];
+
+
+
+let routine = () => {
+  // db.serialize(() => {
+
+  //   console.log('db serialization');
+
+  //   // //Season Definition
+  //   // let q = 'SELECT id, json FROM DestinySeasonDefinition';
+  //   // db.all(q, function (err, row){
+  //   //   db.jsonObjs.push(JSON.parse(row.json));
+  //   // });
+
+  //   q = 'SELECT json FROM DestinyInventoryItemDefinition';
+  //   db.all(q, [], (err, res) => {
+  //     // itemInfo[row.id] = (JSON.parse(row.json));
+  //     db.itemInfo = res;
+  //   }).then( ()=> {
+  //     console.log('item#: ' + db.itemInfo.length);
+  //   });
+
+  // });
+
+  q = 'SELECT json FROM DestinyInventoryItemDefinition';
+  db.all(q, [], (err, res) => {
+    // itemInfo[row.id] = (JSON.parse(row.json));
+    db.itemInfo = res;
+    console.log('item#: ' + db.itemInfo.length);
+  });
+}
 
 // routine();
 
@@ -83,25 +95,39 @@ db.printSeasons = () => {
 
 //Huckleberry itemHash = 2286143274
 //Posterity itemHash   = 3281285075
-let printItemInfo = (itemHash=3281285075) => {
-  console.log('id: ' + itemHash); // console.log(jsonObjs[0]);
-  console.log('item#: ' + itemInfo.length);
+//Astral Horizon itemHash = 1697682876
+// let printItemInfo = (itemHash=1697682876) => {
+db.printItemInfo_Safe = (itemHash=1697682876) => {
 
-  console.log('info: ');
-  let flag_search = false;
-  for ( let o of itemInfo) {
-    if( o.hash === itemHash) {
-      console.log('Item Found');
-      console.log(o);
-      flag_search = true;
-      break;
+  // routine();
+
+  console.log('id: ' + itemHash);
+
+  q = 'SELECT json FROM DestinyInventoryItemDefinition';
+  db.all(q, [], (err, res) => {
+
+    db.itemInfo = [];
+    console.log(res.length);
+
+    for( let o of res) {
+      db.itemInfo.push(JSON.parse(o.json));
     }
-  }
 
+    console.log('info: ');
+    let flag_search = false;
+    for ( let o of db.itemInfo) {
+      if( o.hash === itemHash) {
+        console.log('Item Found');
+        console.log(o);
+        flag_search = true;
+        break;
+      }
+    }
+    if(!flag_search) {
+      console.log('Item Not Found');
+    }
+  });
 }
-
-
-
 
 // db.close( () => {
 //   printSeasonInfo();
