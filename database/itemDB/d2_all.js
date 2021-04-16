@@ -360,6 +360,7 @@ async function asyncSearchID2(input){
 
 async function searchText(text) {
   let searchResult = [];
+  if(text.length < 2) return searchResult;
   for(let t of tables){
     let q = `SELECT * FROM ${t}`;
     const result = await db_promise.all(q);

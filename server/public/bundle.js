@@ -15,7 +15,7 @@
   \*************************************/
 /***/ ((module) => {
 
-eval("const APIheader = {\r\n  key: 'X-API-KEY',\r\n  value: 'b556e93f437c49febdf1e10af4b284e3',\r\n  myID: '4611686018468660527'\r\n};\r\n\r\nmodule.exports = APIheader;\n\n//# sourceURL=webpack://ddb/./client/src/API/BungieAPI.js?");
+eval("\r\nconst APIheader = {\r\n  key: 'X-API-KEY',\r\n  value: 'b556e93f437c49febdf1e10af4b284e3',\r\n  myID: '4611686018468660527'\r\n};\r\n\r\nmodule.exports = APIheader;\n\n//# sourceURL=webpack://ddb/./client/src/API/BungieAPI.js?");
 
 /***/ }),
 
