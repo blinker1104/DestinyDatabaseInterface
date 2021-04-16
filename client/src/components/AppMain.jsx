@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 
-import SeasonList from './SeasonList.jsx';
+// import SeasonList from './Season/SeasonList.jsx';
 
-import CharacterList from './CharacterList.jsx';
+import CharacterList from './Equipment/CharacterList.jsx';
 
 
 const bungieBaseURL = 'https://www.bungie.net';
@@ -15,87 +15,92 @@ class AppMain extends React.Component {
 
     this.state = {
       userId: '4611686018468660527',
-      seasonInfo: [],
-      seasonInfoVisible: false,
-      WeaponInfo: [],
-      WeaponIcons_0: [],
-      WeaponIcons_1: [],
-      WeaponIcons_2: [],
       WeaponInfoVisible: false,
       itemList:[]
     };
-    this.getSeasonInfo = this.getSeasonInfo.bind(this);
-    this.getWeaponInfo = this.getWeaponInfo.bind(this);
-    this.getWeaponDetailInfo = this.getWeaponDetailInfo.bind(this);
 
   }
 
   componentDidMount() {
-    console.log('will this be printed?');
-    this.state.seasonInfo[0] = 'no data';
-    // this.getWeaponDetailInfo();
-  }
-
-  getSeasonInfo() {
-    console.log('Season Info button clicked ' + this.state.seasonInfoVisible);
-
-    if(!this.state.seasonInfoVisible){
-
-      if(this.state.seasonInfo.length === 1){
-        axios.get('/getSeasons')
-        .then((res) => {
-          console.log('getSeason - response received' + res);
-          // Load SeasonInfo from server DB
-          this.setState({
-            seasonInfo: res.data,
-            seasonInfoVisible: true
-          });
-        });
-      } else {
-        //Toggle View - On
-        this.setState({
-          seasonInfoVisible: true
-        });
-      }
-    } else {
-      // Toggle View - Off
-      this.setState({
-        seasonInfoVisible: false
-      });
-    }
+    console.log('DDI started');
   }
 
 
 
-  getWeaponInfo() {
-    console.log('Weapon Info button clicked ' + this.state.weaponInfoVisible);
 
-    if(!this.state.weaponInfoVisible){
+  render() {
 
-      if(this.state.weaponInfo.length === 1){
-        axios.get('/getWeapons')
-        .then((res) => {
-          console.log('getSeason - response received' + res);
-          // Load SeasonInfo from server DB
-          this.setState({
-            weaponInfo: res.data,
-            weaponInfoVisible: true
-          });
-        });
-      } else {
-        //Toggle View - On
-        this.setState({
-          weaponInfoVisible: true
-        });
-      }
-    } else {
-      // Toggle View - Off
-      this.setState({
-        weaponInfoVisible: false
-      });
-    }
 
+    return (
+      <div className="main">
+        DI menu
+        <div>
+          <div className="info" id="div_info">
+
+            <CharacterList userId={this.state.userId} />
+
+          </div>
+
+        </div>
+
+      </div>);
   }
+
+}
+
+export default AppMain;
+
+
+
+
+// getWeaponInfo() {
+//   console.log('Weapon Info button clicked ' + this.state.weaponInfoVisible);
+
+//   if(!this.state.weaponInfoVisible){
+
+//     if(this.state.weaponInfo.length === 1){
+//       axios.get('/getWeapons')
+//       .then((res) => {
+//         // Load Equipment Info from server DB
+//         this.setState({
+//           weaponInfo: res.data,
+//           weaponInfoVisible: true
+//         });
+//       });
+//     } else {
+//       //Toggle View - On
+//       this.setState({
+//         weaponInfoVisible: true
+//       });
+//     }
+//   } else {
+//     // Toggle View - Off
+//     this.setState({
+//       weaponInfoVisible: false
+//     });
+//   }
+
+// }
+
+
+{/* <button onClick={this.getWeaponDetailInfo}>
+                Weapon Detail Please </button> */}
+
+    //DIV STYLE
+    //https://upmostly.com/tutorials/changing-the-background-color-in-react
+
+
+
+
+
+
+
+
+
+/*
+
+
+  //  this.getWeaponDetailInfo = this.getWeaponDetailInfo.bind(this);
 
 
   //Testing
@@ -138,70 +143,11 @@ class AppMain extends React.Component {
   }
 
 
-  render() {
-
-    const icons_slot0 = this.state.WeaponIcons_0.map( (url)=>{
-      return (<img  style={{
-        backgroundColor: 'gray',
-        width: '50px',
-        height: '50px' }}
-        src={url} />);
-    });
-    // console.log('Icons#: ', icons_slot0.length);
-
-    //DIV STYLE
-    //https://upmostly.com/tutorials/changing-the-background-color-in-react
-
-    return (
-      <div className="main">
-        DI menu
-        <div>
-          <div className="info" id="div_info">
-
-            <div>
-              <div className="sample Item icons slot" id="item_slot_1">
-                {icons_slot0};
-              </div>
-              {/* <button onClick={this.getWeaponDetailInfo}>
-                Weapon Detail Please </button> */}
-            </div>
+*/
 
 
 
-            {/* <div>
-              <div className="sample Item icons slot" id="item_slot_1">
-                {this.state.itemList};
-              </div>
-              <button onClick={this.getWeaponDetailInfo}>
-                Weapon Detail Please </button>
-            </div> */}
-
-            <CharacterList userId={this.state.userId} />
 
 
 
-            <button onClick={this.getSeasonInfo}>
-              {this.state.seasonInfoVisible ? "Hide " : "Show "} Season Info </button>
 
-            {/* <p>{this.state.seasonInfo.length}</p> */}
-            {this.state.seasonInfoVisible ?
-              <SeasonList info={this.state.seasonInfo}/> : ''
-            }
-          </div>
-
-          {/* <div className="info" id="div_info">
-            <button onClick={this.getWeaponInfo}>
-              Show Equipped Weapons Info </button>
-
-
-            {this.state.WeaponInfoVisible ?
-              <WeaponList info={this.state.weaponInfo}/> : ''
-            }
-          </div> */}
-        </div>
-
-      </div>);
-  }
-}
-
-export default AppMain;

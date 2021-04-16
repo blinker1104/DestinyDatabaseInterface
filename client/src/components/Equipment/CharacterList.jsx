@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 
-import WeaponList from './WeaponList.jsx';
+import EquipmentList from './EquipmentList.jsx';
 
-const APIkey = require('../API/BungieAPI.js');
+const APIkey = require('../../API/BungieAPI.js');
 //https://www.bungie.net/platform/Destiny2/3/Profile/~/?components=100
 // APIKEY, MYID in API.js
 
@@ -74,14 +74,17 @@ class CharacterList extends React.Component {
 
 
   render() {
+
+    console.log('CharacterList render');
+
     const displayIds = [0,1,2];  // Character ids to display
     const WeaponSets = displayIds.map(id => {
       const idSet = {
         cid : this.state.characterIds[id],
-        uid :this.state.userId
+        uid : this.state.userId
       };
 
-      return ( <WeaponList ids = {idSet} />);
+      return ( <EquipmentList ids = {idSet} />);
     });
     return (
       <div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const APIkey = require('../API/BungieAPI.js');
+const APIkey = require('../../API/BungieAPI.js');
 
 const bungieBaseURL = 'https://www.bungie.net';
 const bungieURL = 'https://www.bungie.net/platform/Destiny2/';
@@ -37,9 +37,9 @@ class ItemInfo extends React.Component {
     //  console.log(props);
 
     this.getEquipmentInfo = this.getEquipmentInfo.bind(this);
-    this.getWeaponInfo = this.getWeaponInfo.bind(this);
     this.getPerkInfo = this.getPerkInfo.bind(this);
     this.setIcons = this.setIcons.bind(this);
+    this.createIconList = this.createIconList.bind(this);
   }
 
 
@@ -49,8 +49,7 @@ class ItemInfo extends React.Component {
 
   componentDidMount() {
 
-    // this.getEquipmentInfo();
-    this.getPerkInfo();
+    this.getEquipmentInfo();
   }
 
   getEquipmentInfo() {
@@ -58,7 +57,7 @@ class ItemInfo extends React.Component {
     //==================
     //GetEquipment
     // 0: WeaponIcon
-    //GetPerks
+    //GetPerks  (0~10)
     // 0: Intrinsic
     // 6: Mod
     // 7: Masterwork
@@ -70,44 +69,12 @@ class ItemInfo extends React.Component {
     //==================
     // 5: Shader
     // 8: Tracker(PVE/PVP)
+    // 9: Ornament
 
-    // iconIds[0] = this.state.itemId;
     this.getPerkInfo();
 
   }
 
-  getWeaponInfo(){
-    console.log('get equipment info');
-    const uid = this.state.userId;
-    const URL =
-      bungieURL+profile_steam+uid
-      +option_char+cid+equipment_component;
-
-    // console.log(uid);
-    // console.log(cid);
-    // console.log('URL ', URL);
-
-    // axios({
-    //     method : 'get',
-    //     url : URL,
-    //     headers : {'X-API-Key' :  APIkey.value}
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data.Response);
-    //     const equipment = res.data.Response.equipment.data.items;
-
-    //     this.setState({
-    //       equipment : equipment,
-    //       equipmentReady : true
-    //     });
-
-
-    //   })
-    //   .catch(function (error) {
-    //     console.log('Error', error.message);
-    //     console.log(error.config);
-    //   });
-  }
 
   getPerkInfo(){
     const uid = this.state.userId;
@@ -124,16 +91,11 @@ class ItemInfo extends React.Component {
     })
     .then((res) => {
       // console.log('Perks - '+ itemId + '/'+ instanceId);
-      // console.log(res.data);
       const perks = res.data.Response.sockets.data ?
         res.data.Response.sockets.data.sockets : [];
 
       // console.log(perks);
       this.state.perks = perks;
-      // this.setState({
-      //   equipment : equipment,
-      //   equipmentReady : true
-      // });
       this.setIcons();
 
     })
@@ -150,7 +112,7 @@ class ItemInfo extends React.Component {
     //==================
     //GetEquipment
     // 0: WeaponIcon
-    //GetPerks
+    //GetPerks  (0~10)
     // 0: Intrinsic
     // 6: Mod
     // 7: Masterwork
@@ -162,12 +124,13 @@ class ItemInfo extends React.Component {
     //==================
     // 5: Shader
     // 8: Tracker(PVE/PVP)
+    // 9: Ornament
 
-    const iconOrder = [0,6,7,1,2,3,4];
+    const iconOrder = [0, 6,7,1,2,3,4];
     const itemId = this.state.itemId;
 
     let iconUrls=  [];
-    iconUrls[0] = itemId;
+    iconUrls.push(itemId);
     if(this.state.perks){
       // console.log(this.state.perks);
 
@@ -175,6 +138,12 @@ class ItemInfo extends React.Component {
         iconUrls[i+1] = this.state.perks[i].isEnabled ?
           this.state.perks[i].plugHash : 0;
       }
+
+      // for(let o of iconOrder){
+      //   if(o > this.state.perks.length) continue;
+      //   iconUrls.push(this.state.perks[o].isEnabled ?
+      //     this.state.perks[o].plugHash : 0);
+      // }
     }
     const icons = iconUrls.join();
     // console.log('icons: ' + icons);
@@ -191,10 +160,49 @@ class ItemInfo extends React.Component {
             itemReady: true,
             iconUrls: iconUrls
           });
-
           }
       });
   }
+
+
+
+  createIconList(){
+    if(!this.state.itemReady) return 'Loading';
+    return (
+      this.state.iconUrls.map( (url) => {
+        // console.log(url);
+        if(!url || url === hash_emptySocket) return('x');
+        return (<img style={{
+          backgroundColor: 'gray',
+          width: '50px',
+          height: '50px' }}
+          src={url} />);
+      })
+    );
+  }
+
+
+  render() {
+
+    console.log('ItemInfo render');
+
+    const iconsIds = this.createIconList();
+
+    return (
+      <div className="WeaponList">
+        {iconsIds}
+      </div>
+    );
+  }
+}
+
+
+
+
+export default ItemInfo;
+
+
+
 
 
   // 4248662490-4294967296
@@ -206,44 +214,4 @@ class ItemInfo extends React.Component {
 
 
   // - Kinetic Weapon
-
-
-  render() {
-
-
-    // if(this.state.itemReady)
-    //   console.log(this.state.iconUrls.length);
-    // console.log('Icon Urls');
-
-    const iconsIds = this.state.itemReady ? this.state.iconUrls.map( (url) => {
-      // console.log(url);
-      if(!url || url === hash_emptySocket) return('');
-      return (<img  style={{
-        backgroundColor: 'gray',
-        width: '50px',
-        height: '50px' }}
-        src={url} />);
-    }) : 'Loading';
-
-    // if(!this.state.equipmentReady) {
-    //   return (<div>No Equipment Info</div>);
-    // }
-
-    // const weaponInfo = this.state.equipment.map( (item) => {
-    //   return (<div>
-
-    //   </div>)
-    // });
-
-    // const perks = this.state.iconIds.join();
-
-    return (
-      <div className="WeaponList">
-        {iconsIds}
-      </div>
-    );
-  }
-}
-
-export default ItemInfo;
 
