@@ -68,10 +68,14 @@ class EquipmentList extends React.Component {
         // Weapons / Armors / Class
 
 
-        const equipment = res.data.Response.equipment.data.items;
-        console.log('Class information ' + this.state.userId + ' / ' + this.state.charId);
-        console.log(res.data.Response.equipment.data.items[11]);
-        // const equipment = res.data.Response.equipment.data.items.slice(0,3);
+        // const equipment = res.data.Response.equipment.data.items;
+        // console.log('Class information ' + this.state.userId + ' / ' + this.state.charId);
+        // console.log(res.data.Response.equipment.data.items[11]);
+        const equipment = [];
+        equipment.push(res.data.Response.equipment.data.items[11]);
+        equipment.push(res.data.Response.equipment.data.items[0]);
+        equipment.push(res.data.Response.equipment.data.items[1]);
+        equipment.push(res.data.Response.equipment.data.items[2]);
 
         this.setState({
           equipment : equipment,

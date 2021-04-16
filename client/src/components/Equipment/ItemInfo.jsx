@@ -10,7 +10,8 @@ const profile_psn   = '2/Profile/';
 const profile_steam = '3/Profile/';
 const option_item = '/Item/';
 const equipment_component = '?components=205';
-const perk_component = '?components=305';
+// const perk_component = '?components=305'; // Plug
+const perk_component = '?components=302'; // Perk
 
 
 const hash_emptySocket = 4248662490;
@@ -91,8 +92,11 @@ class ItemInfo extends React.Component {
     })
     .then((res) => {
       // console.log('Perks - '+ itemId + '/'+ instanceId);
-      const perks = res.data.Response.sockets.data ?
-        res.data.Response.sockets.data.sockets : [];
+      // const perks = res.data.Response.sockets.data ?
+      //   res.data.Response.sockets.data.sockets : [];
+
+        const perks = res.data.Response.perks.data ?
+        res.data.Response.perks.data.perks : [];
 
       // console.log(perks);
       this.state.perks = perks;
@@ -126,27 +130,65 @@ class ItemInfo extends React.Component {
     // 8: Tracker(PVE/PVP)
     // 9: Ornament
 
-    const iconOrder = [0, 6,7,1,2,3,4];
+    const disabledTrackerIconHash = 2285418970;
+    const iconOrder = [0,6,7,1,2,3,4];
+    const iconOrder_exotic = [0,-1,10,1,2,3,4];
     const itemId = this.state.itemId;
 
     let iconUrls=  [];
-    iconUrls.push(itemId);
-    if(this.state.perks){
-      // console.log(this.state.perks);
 
-      for(let i=0; i<this.state.perks.length; i++) {
-        iconUrls[i+1] = this.state.perks[i].isEnabled ?
-          this.state.perks[i].plugHash : 0;
+
+
+    //Perk Setting
+    console.log('# of Perks: ' , this.state.perks.length);
+    console.log(this.state.perks);
+    for(let o of this.state.perks){
+      if(o.iconPath !== ''){
+        iconUrls.push(bungieBaseURL + o.iconPath);
       }
+    }
+    this.setState({
+      itemReady: true,
+      iconUrls: iconUrls
+    });
+    return ;
 
-      // for(let o of iconOrder){
-      //   if(o > this.state.perks.length) continue;
-      //   iconUrls.push(this.state.perks[o].isEnabled ?
-      //     this.state.perks[o].plugHash : 0);
-      // }
+
+
+
+    iconUrls.push(itemId);  // Add Weapon Icon at [0]
+    console.log('ITEM ID: ', itemId);
+    if(this.state.perks){
+      const isExotic = this.state.perks[5].isEnabled ? !this.state.perks[5].isEnabled : false; // Shader is not applicable in Exotics.
+
+      console.log('Perks : ');
+      console.log(this.state.perks);
+
+      const detailVersion = true;
+      if(detailVersion){
+        for(let i=0; i<this.state.perks.length; i++) {
+          iconUrls[i+1] = this.state.perks[i].isEnabled ?
+            this.state.perks[i].plugHash : 0;
+          // iconUrls[i+1] = this.state.perks[i].isEnabled ?
+          //   this.state.perks[i].perkHash : 0;
+        }
+      } else if(isExotic){
+        for(let o of iconOrder_exotic){
+          if(o > this.state.perks.length) continue;
+          if(o < 0){ iconUrls.push(disabledTrackerIconHash); continue;}
+          iconUrls.push(this.state.perks[o].isEnabled ?
+            this.state.perks[o].plugHash : 0);
+        }
+      } else {
+        for(let o of iconOrder){
+          if(o > this.state.perks.length) continue;
+          iconUrls.push(this.state.perks[o].isEnabled ?
+            this.state.perks[o].plugHash : 0);
+        }
+      }
     }
     const icons = iconUrls.join();
-    // console.log('icons: ' + icons);
+    // console.log(`icons ${iconUrls.length}: ${iconUrls}`);
 
     axios.get('/getItems/' + icons)
       .then((response)=>{
@@ -154,13 +196,13 @@ class ItemInfo extends React.Component {
           iconUrls = [];
           for(let i=0; i<response.data.length; i++){
             const url = response.data[i].icon;
-            iconUrls.push(url ? bungieBaseURL + url : '');
+            iconUrls.push(url ? bungieBaseURL + url : 'x');
           }
           this.setState({
             itemReady: true,
             iconUrls: iconUrls
           });
-          }
+        }
       });
   }
 
@@ -169,14 +211,14 @@ class ItemInfo extends React.Component {
   createIconList(){
     if(!this.state.itemReady) return 'Loading';
     return (
-      this.state.iconUrls.map( (url) => {
+      this.state.iconUrls.map( (url, i) => {
         // console.log(url);
         if(!url || url === hash_emptySocket) return('x');
-        return (<img style={{
+        return (<span><img style={{
           backgroundColor: 'gray',
           width: '50px',
           height: '50px' }}
-          src={url} />);
+          src={url}/> {i}</span> );
       })
     );
   }
@@ -214,4 +256,21 @@ export default ItemInfo;
 
 
   // - Kinetic Weapon
+
+
+
+
+      // //2415517654 // Bastion
+      // 2415517654 - WEAPON
+      // 1186480754 - Intrinsic P
+      // 3250034553 - P1
+      // 1687452232 - P2
+      // 4190643473 - P3
+      // 3465198467 - P4
+      // 0 - 5th - Shader
+      // 2931483505 - Ornament
+      // 0
+      // 0,
+      // 2285418970 - Tracker - Disabled
+      // 1498917124 - Catalyst
 

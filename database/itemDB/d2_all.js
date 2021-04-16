@@ -382,29 +382,36 @@ async function searchText(text) {
 
 
 async function questionForm () {
-  for(let i=0; i<24; i++){
-    const searchWord = await askQuestion("ID please (0 to close): ");
-    if(searchWord ===  '0') return;
-    else {
-      console.log('Search Keyword: ', searchWord);
-      const search = await asyncSearchID2(searchWord);
-      if(!search){
-        console.log('No Data Found');
-        continue;
+  try{
+    for(let i=0; i<24; i++){
+      const searchWord = await askQuestion("ID please (0 to close): ");
+      if(searchWord ===  '0') return;
+      else {
+        console.log('Search Keyword: ', searchWord);
+        const search = await asyncSearchID2(searchWord);
+        if(!search){
+          console.log('No Data Found');
+          continue;
+        }
+        console.log(' --- result --- ');
+        for(let i=0; i<search.length; i+=2){
+          // console.log('from '+search[i]);
+          // console.log(search[i+1]);
+          const data_source = search[i];
+          const data = JSON.parse(search[i+1].json);
+          const name = data.displayProperties ?
+            data.displayProperties.name : 'No Name Data';
+          console.log( '- '+name + ' / ' + data_source);
+          console.log(data);
+        }
+        console.log(' --- result end --- ');
       }
-      console.log(' --- result --- ');
-      for(let i=0; i<search.length; i+=2){
-        // console.log('from '+search[i]);
-        // console.log(search[i+1]);
-        const data_source = search[i];
-        const data = JSON.parse(search[i+1].json);
-        const name = data.displayProperties ? data.displayProperties.name : 'No Name Data';
-        console.log( '- '+name + ' / ' + data_source);
-        console.log(data);
-      }
-      console.log(' --- result end --- ');
     }
+  }catch(err){
+    console.log(err);
+    throw err;
   }
+
 };
 
 
