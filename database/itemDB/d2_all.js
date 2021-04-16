@@ -157,36 +157,30 @@ function searchID(ids) {
 }
 
 
-function searchText(text) {
-  db.serialize(() => {
-    db.all('SELECT * FROM DestinyInventoryItemDefinition', [], (err, res) => {
-      if(err){
+// function searchText(text) {
+//   console.log('Seach Text ', text);
+//   db.serialize(() => {
+//     for(let t of tables){
+//       db.all(`SELECT * FROM ${t}`, [], (err, res) => {
+//         if(err){
 
-      } else {
-        // console.log('res = ');
-        for(let r of res){
-          if(r.json){
+//         } else {
+//           for(let r of res){
+//             if(r.json){
 
-            //Masterwork ONLY
-            const j = JSON.parse(r.json);
-            if(j.displayProperties.name === text){
-              console.log( j.hash );
-              console.log( j.displayProperties );
-            }
-
-            //WORKING
-            // if(r.json.includes(text)){
-            //   const j = JSON.parse(r.json);
-            //   console.log( j.hash );
-            //   console.log( j.displayProperties );
-            // }
-          }
-
-        }
-      }
-    });
-  });
-}
+//               //Masterwork ONLY
+//               const j = JSON.parse(r.json);
+//               // if(j.displayProperties.name === text){
+//               //   console.log( j.hash );
+//               //   console.log( j.displayProperties );
+//               // }
+//             }
+//           }
+//         }
+//       });
+//     }
+//   });
+// }
 
 
 // searchID(2697220197);  //  Masterwork.Range // -1597747099
@@ -317,6 +311,7 @@ async function asyncSearchID(ids){
 
 
 
+
 async function askQuestion(query) {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -342,11 +337,12 @@ async function askQuestion(query) {
 
 
 async function asyncSearchID2(input){
-  const ids = Number.parseInt(input);
   let searchResult = [];
-  if(ids ===  0) return searchResult;
-  if(typeof ids === "number"){
-    let id = idOverflowCheck(ids);
+  if(input ===  '0') return searchResult;
+  let id = idOverflowCheck(Number.parseInt(input));
+  if(typeof id === "number" && id){
+
+    console.log(id);
     for(let t of tables){
       let q = `SELECT * FROM ${t} WHERE id = ${id}`;
       const result = await db_promise.all(q);
@@ -356,9 +352,31 @@ async function asyncSearchID2(input){
       }
     }
   } else {
-    searchText(ids);
+    searchText(input);
   }
   return (searchResult);
+}
+
+
+async function searchText(text) {
+  let searchResult = [];
+  for(let t of tables){
+    let q = `SELECT * FROM ${t}`;
+    const result = await db_promise.all(q);
+    for(let r of result){
+
+      //Masterwork ONLY
+      const j = JSON.parse(r.json);
+      if(!j.displayProperties || !j.displayProperties.name) continue;
+      if(j.displayProperties.name.includes(text)){
+        // console.log( j.hash );
+        // console.log( j.displayProperties );
+        console.log(`${j.hash} / ${j.displayProperties.name}` );
+      }
+      //HASH
+    }
+  };
+  return searchResult;
 }
 
 
@@ -369,6 +387,10 @@ async function questionForm () {
     else {
       console.log('Search Keyword: ', searchWord);
       const search = await asyncSearchID2(searchWord);
+      if(!search){
+        console.log('No Data Found');
+        continue;
+      }
       console.log(' --- result --- ');
       for(let i=0; i<search.length; i+=2){
         // console.log('from '+search[i]);

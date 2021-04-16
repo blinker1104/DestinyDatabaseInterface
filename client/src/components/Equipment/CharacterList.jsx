@@ -101,3 +101,21 @@ class CharacterList extends React.Component {
 
 
 export default CharacterList;
+
+
+
+///1432514322 Attunement of Grace
+//https://d2.destinygamewiki.com/wiki/Dawnblade
+
+
+// 718603205 / Prime Attunement
+// 4169856988 / Prime Attunement
+// 3159199769 / Attunement of Fission
+// 3400906385 / Attunement of Hunger
+// 3400906386 / Attunement of Chaos
+// 3577450252 / Attunement of Flame
+// 3577450255 / Attunement of Sky
+// 4072386847 / Attunement of Control
+// 1432514322 / Attunement of Grace
+// 1577040049 / Attunement of the Elements
+// 1577040050 / Attunement of Conduction
