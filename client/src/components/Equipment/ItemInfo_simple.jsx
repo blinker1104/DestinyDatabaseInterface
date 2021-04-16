@@ -10,8 +10,8 @@ const profile_psn   = '2/Profile/';
 const profile_steam = '3/Profile/';
 const option_item = '/Item/';
 const equipment_component = '?components=205';
-const perk_component = '?components=305'; // Plug
-// const perk_component = '?components=302'; // Perk
+// const perk_component = '?components=305'; // Plug
+const perk_component = '?components=302'; // Perk
 
 
 const hash_emptySocket = 4248662490;
@@ -91,12 +91,12 @@ class ItemInfo extends React.Component {
       headers : {'X-API-Key' :  APIkey.value}
     })
     .then((res) => {
-      console.log('Perks - '+ itemId + '/'+ instanceId);
-      const perks = res.data.Response.sockets.data ?
-        res.data.Response.sockets.data.sockets : [];
+      // console.log('Perks - '+ itemId + '/'+ instanceId);
+      // const perks = res.data.Response.sockets.data ?
+      //   res.data.Response.sockets.data.sockets : [];
 
-        // const perks = res.data.Response.perks.data ?
-        // res.data.Response.perks.data.perks : [];
+        const perks = res.data.Response.perks.data ?
+        res.data.Response.perks.data.perks : [];
 
       // console.log(perks);
       this.state.perks = perks;
@@ -140,37 +140,31 @@ class ItemInfo extends React.Component {
 
 
     //Perk Setting
-    // console.log('# of Perks: ' , this.state.perks.length);
-    // console.log(this.state.perks);
-    // for(let o of this.state.perks){
-    //   if(o.iconPath !== ''){
-    //     iconUrls.push(bungieBaseURL + o.iconPath);
-    //   }
-    // }
-    // this.setState({
-    //   itemReady: true,
-    //   iconUrls: iconUrls
-    // });
-    // return ;
+    console.log('# of Perks: ' , this.state.perks.length);
+    console.log(this.state.perks);
+    for(let o of this.state.perks){
+      if(o.iconPath !== ''){
+        iconUrls.push(bungieBaseURL + o.iconPath);
+      }
+    }
+    this.setState({
+      itemReady: true,
+      iconUrls: iconUrls
+    });
+    return ;
 
 
-
-    //3211806999
 
 
     iconUrls.push(itemId);  // Add Weapon Icon at [0]
     console.log('ITEM ID: ', itemId);
     if(this.state.perks){
-      const isExotic = this.state.perks.length > 10; // Shader is not applicable in Exotics.
+      const isExotic = this.state.perks[5].isEnabled ? !this.state.perks[5].isEnabled : false; // Shader is not applicable in Exotics.
 
       console.log('Perks : ');
       console.log(this.state.perks);
 
-
-
-      const detailVersion = false;
-
-
+      const detailVersion = true;
       if(detailVersion){
         for(let i=0; i<this.state.perks.length; i++) {
           iconUrls[i+1] = this.state.perks[i].isEnabled ?
@@ -179,11 +173,10 @@ class ItemInfo extends React.Component {
           //   this.state.perks[i].perkHash : 0;
         }
       } else if(isExotic){
-        console.log('Exotic Confirmed');
         for(let o of iconOrder_exotic){
           if(o > this.state.perks.length) continue;
-          if(o < 0) iconUrls.push(disabledTrackerIconHash);
-          else iconUrls.push(this.state.perks[o].isEnabled ?
+          if(o < 0){ iconUrls.push(disabledTrackerIconHash); continue;}
+          iconUrls.push(this.state.perks[o].isEnabled ?
             this.state.perks[o].plugHash : 0);
         }
       } else {
@@ -221,11 +214,11 @@ class ItemInfo extends React.Component {
       this.state.iconUrls.map( (url, i) => {
         // console.log(url);
         if(!url || url === hash_emptySocket) return('x');
-        return (<img style={{
+        return (<span><img style={{
           backgroundColor: 'gray',
           width: '50px',
           height: '50px' }}
-          src={url}/> );
+          src={url}/> {i}</span> );
       })
     );
   }

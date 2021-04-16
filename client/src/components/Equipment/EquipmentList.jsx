@@ -72,7 +72,7 @@ class EquipmentList extends React.Component {
         // console.log('Class information ' + this.state.userId + ' / ' + this.state.charId);
         // console.log(res.data.Response.equipment.data.items[11]);
         const equipment = [];
-        equipment.push(res.data.Response.equipment.data.items[11]);
+        // equipment.push(res.data.Response.equipment.data.items[11]);
         equipment.push(res.data.Response.equipment.data.items[0]);
         equipment.push(res.data.Response.equipment.data.items[1]);
         equipment.push(res.data.Response.equipment.data.items[2]);
