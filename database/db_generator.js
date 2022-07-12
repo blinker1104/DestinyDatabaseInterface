@@ -76,7 +76,7 @@ let itemDB_generator = () => {
           if(err) {
             return console.log(err.message);
           }
-          console.log( 'item ' t.name + ' added to ItemDB');
+          console.log( 'item ' + t.name + ' added to ItemDB');
         });
 
       }
