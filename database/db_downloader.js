@@ -51,14 +51,22 @@ axios(manifestConfig)
           
           // Download - Content DB
           try{
-            response.data.pipe(fs.createWriteStream(newDbFileName));
-          } catch(err){
-            console.log("try to execute 'npm run dbDownloader' from project root dir");
-            console.error(err);
-          }
-        });
+            
+            fs.unlinkSync(newDbFileName);
+            response.data.pipe(fs.createWriteStream(newDbFileName, {flag: 'wx'} ));
+            updateDbVersion(dbFileName);
 
-        updateDbVersion(dbFileName); 
+          } catch(err){
+            if(err.code === "ENOENT"){
+              console.log("ERR: FILE NAME/PATH INCORRECT");
+            }
+            console.log("DB FILE DOWNLOADER ERROR");
+            console.log(" - try to execute 'npm run dbDownloader' from project root dir");
+            // console.error(err); 
+          }
+
+          //https://stackoverflow.com/questions/43293921/cant-catch-exception-from-fs-createwritestream
+        });
       }
     });
   })
