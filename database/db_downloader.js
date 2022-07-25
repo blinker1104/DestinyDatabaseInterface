@@ -36,7 +36,7 @@ axios(manifestConfig)
 
     // db version check - False = outdated
     checkDbVersion(dbFileName).then(updateRequired =>{
-      console.log('READY to DOWNLOAD? : ' + updateRequired);
+      console.log('dbDownloader - NEED to DOWNLOAD? : ' + updateRequired);
       
       if(updateRequired){
         // db Download Setup
@@ -58,9 +58,9 @@ axios(manifestConfig)
 
           } catch(err){
             if(err.code === "ENOENT"){
-              console.log("ERR: FILE NAME/PATH INCORRECT");
+              console.log("dbDownlaoder ERR : FILE NAME/PATH INCORRECT");
             }
-            console.log("DB FILE DOWNLOADER ERROR");
+            console.log(" - DB FILE DOWNLOADER ERROR");
             console.log(" - try to execute 'npm run dbDownloader' from project root dir");
             // console.error(err); 
           }
@@ -76,12 +76,12 @@ function checkDbVersion (fileName) {
     fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
       // update required
       if( buf !== fileName){
-        console.log('different version exist');
+        console.log('DB version check : new version available');
         resolve(true);
       }
       // db is up-to-date
       else{
-        console.log('the current version is up-to-date');
+        console.log('DB version check : the current version is up-to-date');
         resolve(false);
       }
     });
