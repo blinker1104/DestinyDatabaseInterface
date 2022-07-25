@@ -33,8 +33,9 @@ axios(manifestConfig)
 
     // db version check - False = outdated
     checkDbVersion(dbFileName).then(updateRequired =>{
+      console.log('READY to DOWNLOAD? : ' + updateRequired);
+      
       if(updateRequired){
-
         // db Download Setup
         const dbConfig = axiosConfig;
         dbConfig.url = dbPath;
@@ -42,7 +43,7 @@ axios(manifestConfig)
         // execute download - db
         axios(dbConfig).then( (response) => {
           // Download - Content DB
-          response.data.pipe(fs.createWriteStream("./world_en.db"));
+          response.data.pipe(fs.createWriteStream("world_en.db"));
         });
 
         updateDbVersion(dbFileName); 
@@ -50,24 +51,33 @@ axios(manifestConfig)
     });
   })
 
-async function checkDbVersion (fileName) {
-  await fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
-   
-    console.log('db info: ' + buf);
-    // update required
-    if( buf !== fileName){
-      console.log('different version exist')
-      //return true;
-    }
-    else{
-      console.log('the current version is up-to-date');
-      return false;
-    }
+function checkDbVersion (fileName) {
+  // await fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
+  //   // update required
+  //   if( buf !== fileName){
+  //     console.log('different version exist');
+  //     return true;
+  //   }
+  //   else{
+  //     console.log('the current version is up-to-date');
+  //     return false;
+  //   }
+  //  });
 
-    updateDbVersion(fileName);
-    return true;
+  return new Promise((resolve) => {
+    fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
+      // update required
+      if( buf !== fileName){
+        console.log('different version exist');
+        resolve(true);
+      }
+      else{
+        console.log('the current version is up-to-date');
+        resolve(false);
+      }
+    });
   });
-  // If file is up-to-date 
+
 }
 
 function updateDbVersion (dbFileName){
