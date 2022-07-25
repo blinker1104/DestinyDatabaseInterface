@@ -3,11 +3,14 @@
 
 const axios = require('axios').default;
 const fs = require('fs');
+const path = require('path');
 
 
 const bungieBaseURL = 'https://www.bungie.net';
 const bungieManifestURL = bungieBaseURL + '/platform/Destiny2/Manifest';
-// const dbFilename = 'world_sql_content.db';
+// const dbFileName = 'world_sql_content.db';
+
+const directoryName = path.basename(__dirname);
 
 const axiosConfig = {
   method: 'get',
@@ -42,8 +45,17 @@ axios(manifestConfig)
         dbConfig.responseType = 'stream';  
         // execute download - db
         axios(dbConfig).then( (response) => {
+          // Set download folder for new DB file
+          let newDbFileName = "world_en.db";
+          newDbFileName = `./${directoryName}/${newDbFileName}`;
+          
           // Download - Content DB
-          response.data.pipe(fs.createWriteStream("world_en.db"));
+          try{
+            response.data.pipe(fs.createWriteStream(newDbFileName));
+          } catch(err){
+            console.log("try to execute 'npm run dbDownloader' from project root dir");
+            console.error(err);
+          }
         });
 
         updateDbVersion(dbFileName); 
@@ -52,18 +64,6 @@ axios(manifestConfig)
   })
 
 function checkDbVersion (fileName) {
-  // await fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
-  //   // update required
-  //   if( buf !== fileName){
-  //     console.log('different version exist');
-  //     return true;
-  //   }
-  //   else{
-  //     console.log('the current version is up-to-date');
-  //     return false;
-  //   }
-  //  });
-
   return new Promise((resolve) => {
     fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
       // update required
@@ -71,6 +71,7 @@ function checkDbVersion (fileName) {
         console.log('different version exist');
         resolve(true);
       }
+      // db is up-to-date
       else{
         console.log('the current version is up-to-date');
         resolve(false);

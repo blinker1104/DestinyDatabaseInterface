@@ -18,8 +18,6 @@ let itemDB_initTable = () => {
 
 
 let itemDB_generator = () => {
-
-
   // //Huckleberry itemHash = 2286143274
   // //Posterity itemHash   = 3281285075
   // //Astral Horizon itemHash = 1697682876
