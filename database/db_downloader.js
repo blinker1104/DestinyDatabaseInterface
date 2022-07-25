@@ -52,23 +52,28 @@ axios(manifestConfig)
 
 async function checkDbVersion (fileName) {
   await fs.readFile('db_versionInfo.txt', "UTF-8", (err, buf) => {
+   
+    console.log('db info: ' + buf);
     // update required
     if( buf !== fileName){
       console.log('different version exist')
-      return true;
+      //return true;
     }
     else{
       console.log('the current version is up-to-date');
       return false;
     }
+
+    updateDbVersion(fileName);
+    return true;
   });
   // If file is up-to-date 
 }
 
 function updateDbVersion (dbFileName){
-  fs.writeFile('db_versionInfo.txt', dbFileName, (err) =>{
+  fs.writeFile('db_versionInfo.txt', dbFileName, 'UTF-8', (err) =>{
     if(err) console.log(err);
-    console.log('dv version info updated');
+    console.log('db version info updated: ' + dbFileName);
   })
 }
 

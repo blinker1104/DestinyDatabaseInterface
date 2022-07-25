@@ -3,11 +3,30 @@ const path = require('path');
 const app = express();
 const port = 4000;
 
+const axios = require('axios').default;
+
+// DB
+
+//DB downloader
+// const dbFilename = 'world_sql_content.db';
+// axios.get('')
+//   .then( (response) => {
+//     // Donwload - Manifest
+
+//     return axios.get('');
+//   })
+//   .then( (response) => {
+//     // Download - Content DB
+
+
+//   });
 const db = require('../database/db');  // EN global - world content db
 const ItemDAO = require('../database/itemDB/db_item_DAO');
 const ItemDB = require('../database/itemDB/db_item');
 const itemDAO = new ItemDAO();
 const itemDB = new ItemDB(itemDAO);
+
+
 
 const cors = require('cors');
 const bodyParser = require('body-parser');

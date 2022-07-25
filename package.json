@@ -6,7 +6,8 @@
     "start": "node ./server/index.js",
     "test": "nodemon ./server/index.js",
     "db_test": "node ./database/db.js",
-    "db_generator": "node ./database/db_generator.js",
+    "dbDownloader": "node ./database/db_downloader.js",
+    "dbGenerator": "node ./database/db_generator.js",
     "db_gen_item": "node ./database/itemDB/db_item_generator.js",
     "dbSearch": "node ./database/itemDB/d2_all.js",
     "build": "webpack --mode=development",
@@ -20,7 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "sqlite3": "^5.0.8"
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
